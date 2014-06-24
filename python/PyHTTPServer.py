@@ -13,6 +13,8 @@ rootDirString = '/home/knightingal/Downloads/.mix/1000/'
 class RequestHandler(CGIHTTPRequestHandler):
 
     def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
         self.wfile.write("hello world")
 
     def do_POST(self):
@@ -22,7 +24,8 @@ class RequestHandler(CGIHTTPRequestHandler):
         #print content
         jsonObjTotal = json.loads(content)
         print jsonObjTotal
-
+        self.send_response(200)
+        self.end_headers()
         self.wfile.write("ok")
 
 

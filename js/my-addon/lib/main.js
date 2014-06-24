@@ -47,7 +47,7 @@ function handleClick(state) {
                         content: JSON.stringify(pageInfos),
                         contentType : "json",
                         onComplete: function(response) {
-                            //console.log("req return " + response);
+                            console.log("req return " + response);
                         }
                     }).post();
                     pageInfos = [];
@@ -77,7 +77,7 @@ function handleClick(state) {
                 content: JSON.stringify(pageInfos),
                 contentType : "json",
                 onComplete: function(response) {
-                    //console.log("req return " + response);
+                    console.log("req return " + response);
                 }
             }).post();
             pageInfos = [];
