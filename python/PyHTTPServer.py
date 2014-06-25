@@ -14,6 +14,7 @@ class RequestHandler(CGIHTTPRequestHandler):
 
     def do_GET(self):
         self.send_response(200)
+        self.send_header("Content-Type", "text/html")
         self.end_headers()
         self.wfile.write("hello world")
 
@@ -25,6 +26,7 @@ class RequestHandler(CGIHTTPRequestHandler):
         jsonObjTotal = json.loads(content)
         print jsonObjTotal
         self.send_response(200)
+        self.send_header("Content-Type", "text/html")
         self.end_headers()
         self.wfile.write("ok")
 
