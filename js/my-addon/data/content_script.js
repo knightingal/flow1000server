@@ -57,7 +57,11 @@ var Task = {
 
 }
 
+Task.init();
 self.port.on("start", function() {
-    Task.init();
-    Task.doTask();
+    //Task.doTask();
+});
+
+self.port.on("getTitleReq", function() {
+    self.port.emit("getTitleResp", Task.getCurrentTitle());
 });

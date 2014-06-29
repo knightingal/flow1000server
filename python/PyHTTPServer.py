@@ -22,6 +22,24 @@ class RequestHandler(CGIHTTPRequestHandler):
         content_length = self.headers.dict["content-length"]
         content = self.rfile.read(int(content_length))
 
+        path = self.path
+        resp_body = ""
+        if path == '/testExist/':
+            print content
+            try:
+                os.mkdir(rootDirString + content)
+                resp_body = "True"
+            except OSError:
+                print rootDirString + content + "exists"
+                resp_body = "False"
+            finally:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+                self.wfile.write(resp_body)
+                return
+
+
         #print content
         jsonObjTotal = json.loads(content)
         print jsonObjTotal

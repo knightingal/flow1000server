@@ -43,7 +43,7 @@ function handleClick(state) {
                 function() {
                     console.log(pageInfos);
                     Request({
-                        url: "http://127.0.0.1:8081/",
+                        url: "http://127.0.0.1:8081/startDownload/",
                         content: JSON.stringify(pageInfos),
                         contentType : "json",
                         onComplete: function(response) {
@@ -58,6 +58,21 @@ function handleClick(state) {
             worker.port.emit("start");
         }
     });
+
+    worker.port.on("getTitleResp", function(resp) {
+        console.log("getTitleResp" + resp);
+        Request({
+            url: "http://127.0.0.1:8081/testExist/",
+            content: resp,
+            contentType: "text",
+            onComplete: function(response) {
+                console.log("testExist return");
+                console.log(response);
+            }
+        }).post();
+    });
+
+    worker.port.emit("getTitleReq");
 
     worker.port.on("sendPageInfo", function(pageInfo) {
         console.log(pageInfo);
