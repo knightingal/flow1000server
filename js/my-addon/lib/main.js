@@ -2,6 +2,11 @@ var data = require("sdk/self").data;
 var pageMod = require("sdk/page-mod");
 var Request = require("sdk/request").Request;
 
+var dialog_page = require("sdk/panel").Panel({
+    contentURL: data.url("dialog.html"),
+    contentScriptFile: data.url("dialog.js")
+});
+
 // Create a button
 require("sdk/ui/button/action").ActionButton({
   id: "show-panel",
@@ -68,11 +73,16 @@ function handleClick(state) {
             onComplete: function(response) {
                 console.log("testExist return");
                 console.log(response);
+                if (response.text === "False") {
+                    dialog_page.show();
+                } else {
+                    worker.port.emit("start");
+                }
+                
             }
         }).post();
     });
 
-    worker.port.emit("getTitleReq");
 
     worker.port.on("sendPageInfo", function(pageInfo) {
         console.log(pageInfo);
@@ -99,8 +109,13 @@ function handleClick(state) {
             PageMod.destroy();
         }
     );
-
-    worker.port.emit("start");
+    dialog_page.port.on("dialog_resp", function(dialog_resp) {
+        if (dialog_resp === true) {
+            worker.port.emit("start");
+        }
+        dialog_page.hide();
+    });
+    worker.port.emit("getTitleReq");
 
 }
 
