@@ -10,6 +10,7 @@ import Queue
 
 rootDirString = '/home/knightingal/Downloads/.mix/1000/'
 
+
 class RequestHandler(CGIHTTPRequestHandler):
 
     def do_GET(self):
@@ -39,19 +40,16 @@ class RequestHandler(CGIHTTPRequestHandler):
                 self.wfile.write(resp_body)
                 return
 
-
         #print content
-        jsonObjTotal = json.loads(content)
-        print jsonObjTotal
+        json_obj_total = json.loads(content)
+        print json_obj_total
         self.send_response(200)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
         self.wfile.write("ok")
 
-
-
         thread_list = []
-        for jsonObj in jsonObjTotal:
+        for jsonObj in json_obj_total:
             #jsonObj = json.loads(jsonObjStr)
             title = jsonObj["title"]
             print title
@@ -67,14 +65,13 @@ class RequestHandler(CGIHTTPRequestHandler):
         for thread_item in thread_list:
             thread_item.start()
 
-
-
         for thread_item in thread_list:
             thread_item.join()
         print "all task succ"
         for thread_item in thread_list:
-            if thread_item.is_succ == False:
+            if not thread_item.is_succ:
                 print "%s is not succ" % thread_item.img_url
+
 
 class MyThread(Thread):
     def __init__(self, img_url, web_age_url, title_str):
@@ -90,15 +87,18 @@ class MyThread(Thread):
         self.is_succ = True
         que.put(1)
 
+
 def download_img(img_url, web_age_url, title_str):
     while True:
         print "downloading %s" % img_url
         try:
             request = urllib2.Request(img_url)
             request.add_header("Referer", web_age_url)
-            request.add_header("User-Agent",
-                                       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 "
-                                       "(KHTML, like Gecko) Chrome/26.0.1410.63 Safari/537.31")
+            request.add_header(
+                "User-Agent",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 "
+                "(KHTML, like Gecko) Chrome/26.0.1410.63 Safari/537.31"
+            )
             request.add_header("Connection", "keep-alive")
             request.add_header("Accept", "*/*")
             request.add_header("Accept-Encoding", "gzip,deflate,sdch")
@@ -118,12 +118,11 @@ def download_img(img_url, web_age_url, title_str):
         else:
             print "%s download erro, try again" % img_url
 
+if __name__ == "__main__":
+    que = Queue.Queue()
+    for i in range(10):
+        que.put(1)
 
-que = Queue.Queue()
-for i in range(10):
-    que.put(1)
-
-
-serveraddr = ('', 8081)
-sevr = HTTPServer(serveraddr, RequestHandler)
-sevr.serve_forever()
+    server_addr = ('', 8081)
+    server = HTTPServer(server_addr, RequestHandler)
+    server.serve_forever()
