@@ -11,6 +11,15 @@ import Queue
 rootDirString = '/home/knightingal/Downloads/.mix/1000/'
 
 
+def str_cmp(str1, str2):
+    if len(str1) < len(str2):
+        return -1
+    elif len(str1) > len(str2):
+        return 1
+    else:
+        return str1 > str2 and 1 or -1
+
+
 class RequestHandler(CGIHTTPRequestHandler):
 
     def do_GET(self):
@@ -68,6 +77,16 @@ class RequestHandler(CGIHTTPRequestHandler):
         for thread_item in thread_list:
             thread_item.join()
         print "all task succ"
+        for root, dirs, files in os.walk(rootDirString + json_obj_total[0]["title"]):
+            if root == rootDirString + json_obj_total[0]["title"]:
+                pagefd = open(root + "/page.html", "w")
+                pagefd.write("<html><head></head><body>")
+                files.sort(str_cmp)
+                for picname in files:
+                    pagefd.write('<img src="' + picname + '"></img>')
+                pagefd.write("</body></html>")
+                pagefd.close()
+
         for thread_item in thread_list:
             if not thread_item.is_succ:
                 print "%s is not succ" % thread_item.img_url
