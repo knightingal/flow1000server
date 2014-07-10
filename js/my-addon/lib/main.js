@@ -113,6 +113,9 @@ function handleClick(state) {
         if (dialog_resp === true) {
             worker.port.emit("start");
         }
+        else {
+            PageMod.destroy();
+        }
         dialog_page.hide();
     });
     worker.port.emit("getTitleReq");
