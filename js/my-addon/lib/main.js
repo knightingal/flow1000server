@@ -25,13 +25,13 @@ function handleClick(state) {
   //text_entry.show();
     var tab = require("sdk/tabs").activeTab;  
     var worker = tab.attach({
-        contentScriptFile: data.url("content_script.js")
+        contentScriptFile: data.url("content_script_art.js")
 
     });
 
     var PageMod = pageMod.PageMod({
         include: "*",
-        contentScriptFile: data.url("content_script.js"),
+        contentScriptFile: data.url("content_script_art.js"),
         onAttach: function(worker) {
 
             worker.port.on("sendPageInfo", function(pageInfo) {
