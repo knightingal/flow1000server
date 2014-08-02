@@ -14,12 +14,12 @@ var Task = {
 
     "getNextTitle": function() {
         return this.getTitleShort(
-                new String(this.fontElementArray[this.fontElementArray.length - 16].innerHTML)
+                new String(this.fontElementArray[this.fontElementArray.length - 13].innerHTML)
         );
     },
 
     "getNextUrl": function() {
-        return this.fontElementArray[this.fontElementArray.length - 16].parentNode.href;
+        return this.fontElementArray[this.fontElementArray.length - 13].parentNode.href;
     },
 
     "getTitleShort": function(titleString) {
