@@ -10,7 +10,7 @@ var dialog_page = require("sdk/panel").Panel({
 // Create a button
 require("sdk/ui/button/action").ActionButton({
   id: "show-panel",
-  label: "Show Panel",
+  label: "for irt",
   icon: {
     "16": "./icon-16.png",
     "32": "./icon-32.png",
@@ -25,13 +25,13 @@ function handleClick(state) {
   //text_entry.show();
     var tab = require("sdk/tabs").activeTab;  
     var worker = tab.attach({
-        contentScriptFile: data.url("content_script.js")
+        contentScriptFile: data.url("content_script_irt.js")
 
     });
 
     var PageMod = pageMod.PageMod({
         include: "*",
-        contentScriptFile: data.url("content_script.js"),
+        contentScriptFile: data.url("content_script_irt.js"),
         onAttach: function(worker) {
 
             worker.port.on("sendPageInfo", function(pageInfo) {
