@@ -68,8 +68,8 @@ function handleClick(state) {
         console.log("getTitleResp" + resp);
         Request({
             url: "http://127.0.0.1:8081/testExist/",
-            content: resp,
-            contentType: "text",
+            content: JSON.stringify([resp]),
+            contentType: "application/json",
             onComplete: function(response) {
                 console.log("testExist return");
                 console.log(response);
