@@ -20,10 +20,15 @@ function ReqHeadersTemp(pageHref) {
     this["Accept-Charset"]= "GBK,utf-8;q=0.7,*;q=0.3";
 }
 
+var gImgCount = 0;
+var gSuccCount = 0;
 
 router.post('/', function(req, res) {
     console.log(req.body);
     res.send('ok');
+    for (j = 0; j < req.body.length; j++) {
+        gImgCount += req.body[j].imgSrcArray.length;
+    }
     var dirName = RootDirString + req.body[0].title;
     fs.mkdir(dirName, function() {
         for (j = 0; j < req.body.length; j++) {
@@ -33,7 +38,7 @@ router.post('/', function(req, res) {
             var imgSrcArray = req.body[j].imgSrcArray;
             var pageHref = req.body[j].href;
             for (i = 0; i < imgSrcArray.length; i++) {
-
+                
                 var urlObj = url.parse(imgSrcArray[i]);
                 var fileName = path.basename(imgSrcArray[i]);
                 var options = {
@@ -55,7 +60,14 @@ router.post('/', function(req, res) {
                             return function() {
                                 var totalBuff = Buffer.concat(bufferArray[fileName]);
                                 fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
-                                console.log(fileName + " download succ!");
+                                gSuccCount += 1;
+                                console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
+
+                                if (gSuccCount == gImgCount) {
+                                    console.log("all task succ!");
+                                    gImgCount = gSuccCount = 0;
+                                    router.initCb();
+                                }
                             };
                         })(fileName));
                     };

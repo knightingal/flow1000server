@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-(function () {
+var init = function () {
     var dirs = fs.readdirSync(RootDirString); 
 
     for (i = 0; i < dirs.length; i++) {
@@ -41,7 +41,11 @@ app.use(express.static(path.join(__dirname, 'public')));
     for (i = 0; i < dirs.length; i++) {
         picDirs.dirStat[i]['index'] = i;
     }
-})();
+}
+
+postMsg.initCb = init;
+init();
+
 
 app.use('/', routes);
 app.use('/users', users);
