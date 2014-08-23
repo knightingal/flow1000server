@@ -6,4 +6,4 @@ block content
   each val in picList
     p
       a(href="http://127.0.0.1:8081/picDirs?picpage=" + val.index)= val.name
-      img(src="http://127.0.0.1:8081/picDirs/picContent?" + "picpage=" + val.index + "&" + "pic=1.jpg", class="littleimg")
+      img(src="http://127.0.0.1:8081/picDirs/picContent/" + val.index + "/" + "1.jpg", class="littleimg")

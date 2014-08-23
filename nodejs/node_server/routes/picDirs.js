@@ -34,10 +34,12 @@ router.get('/', function(req, res) {
 
 });
 
-router.get('/picContent', function(req, res) {
-    var picpage = req.query.picpage;
-    var pic = req.query.pic;
-    var dirName = router.dirStat[req.query.picpage].name;
+router.get(/\/picContent\/(\w+)\/(\w+\.jpg)/, function(req, res) {
+    //var picpage = req.query.picpage;
+    //var pic = req.query.pic;
+    var picpage = req.params[0];
+    var pic = req.params[1];
+    var dirName = router.dirStat[picpage].name;
     var picBuff = fs.readFileSync(RootDirString + dirName + "/" + pic);
     res.send(picBuff);
 });
