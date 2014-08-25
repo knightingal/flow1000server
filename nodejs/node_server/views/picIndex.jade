@@ -1,9 +1,28 @@
 extends layout
 
 block content
+  script(type='text/javascript').
+    function mOver(obj) {
+      var index = obj.attributes.aindex.value;
+      var imgNode = document.getElementById(index + "img");
+      imgNode.style.display = "block";
+      imgNode.src="http://127.0.0.1:8081/picDirs/picContent/" + index + "/" + "1.jpg";
+
+    }
+    function mOut(obj) {
+      var index = obj.attributes.aindex.value;
+      var imgNode = document.getElementById(index + "img");
+      imgNode.style.display = "none";
+      imgNode.src="";
+
+    }
   h1= title
   p Welcome to #{title}
   each val in picList
     p
-      a(href="http://127.0.0.1:8081/picDirs?picpage=" + val.index)= val.name
-      img(src="http://127.0.0.1:8081/picDirs/picContent/" + val.index + "/" + "1.jpg", class="littleimg")
+      a(href="http://127.0.0.1:8081/picDirs?picpage=" + val.index,
+        onmouseover="mOver(this)", onmouseout="mOut(this)", 
+        aindex=val.index      
+      )= val.name
+      //img(id=val.index + "img", src="http://127.0.0.1:8081/picDirs/picContent/" + val.index + "/" + "1.jpg", class="littleimg", style="display: block")
+      img(id=val.index + "img", src="", class="littleimg")
