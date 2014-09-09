@@ -1,5 +1,6 @@
+
 body {
-  padding: 50px;
+  margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -16,9 +17,10 @@ div.left_list {
 }
 
 .littleimg {
-  width: 256px;
+  /*width: 256px;*/
   display: none;
 }
 .imc_container {
   margin-left: 256px;
+  overflow-y: auto;
 }
