@@ -24,6 +24,9 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var my_creptor = require('./my_creptor');
+console.log(my_creptor.encode());
+
 var init = function () {
     var dirs = fs.readdirSync(RootDirString); 
 
