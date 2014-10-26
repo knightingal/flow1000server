@@ -12,7 +12,8 @@ var picDirs = require('./routes/picDirs');
 picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
-var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
+var RootDirString = '/home/knightingal/DevTools/.mix/1001/';
+picDirs.RootDirString = RootDirString;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -24,8 +25,6 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var my_creptor = require('./my_creptor');
-console.log(my_creptor.encode());
 
 var init = function () {
     var dirs = fs.readdirSync(RootDirString); 
