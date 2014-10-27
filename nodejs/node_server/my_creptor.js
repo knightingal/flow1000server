@@ -5,6 +5,10 @@ var my_creptor = {
 
     "encode": function() {
         return "encode function";
+    },
+	
+    "encodePwd": function() {
+        return "encodePwd";
     }
 };
 
