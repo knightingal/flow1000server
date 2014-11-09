@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var init = function () {
     var dirs = fs.readdirSync(RootDirString); 
-    
+    picDirs.dirStat = [];
     for (i = 0; i < dirs.length; i++) {
         var stat = fs.statSync(RootDirString + dirs[i]);
         if (stat.isDirectory())
