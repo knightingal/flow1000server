@@ -33,6 +33,7 @@ var init = function () {
         var stat = fs.statSync(RootDirString + dirs[i]);
         if (stat.isDirectory())
         {
+            /*
             var picsOri = fs.readdirSync(RootDirString + dirs[i]);
             var patt = new RegExp('\.jpg$');
 
@@ -52,6 +53,7 @@ var init = function () {
                 "firstPic": pics[0],
                 "index": 0
             });
+            */
         }
 
     }
