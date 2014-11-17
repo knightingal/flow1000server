@@ -14,6 +14,7 @@ def str_cmp(str1, str2):
 
 if __name__ == "__main__":
     #print PyHTTPServer.rootDirString
+    #rootDirString = '/home/knightingal/Downloads/.mix/1000/'
     for root, dirs, files in os.walk(PyHTTPServer.rootDirString):
         if root != PyHTTPServer.rootDirString:
             print root

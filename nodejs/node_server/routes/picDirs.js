@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
   else {
     var dirName = router.dirStat[req.query.picpage].name;
     var dirsOri = fs.readdirSync(router.RootDirString + dirName);
-    var patt = new RegExp('\.cry$');
+    var patt = new RegExp('\.jpg$');
     var dirs = [];
     for (i = 0; i < dirsOri.length; i++) {
         if (patt.test(dirsOri[i]) === true) {
@@ -32,12 +32,12 @@ router.get('/', function(req, res) {
 
 });
 
-router.get(/\/picContent\/(\w+)\/(\w+\.cry)/, function(req, res) {
+router.get(/\/picContent\/(\w+)\/(\w+\.jpg)/, function(req, res) {
     var picpage = req.params[0];
     var pic = req.params[1];
     var dirName = router.dirStat[picpage].name;
     var picBuff = fs.readFileSync(router.RootDirString + dirName + "/" + pic);
-    picBuff = kn_creptor.decode(picBuff, "Knightingal");
+    //picBuff = kn_creptor.decode(picBuff, "Knightingal");
     res.send(picBuff);
 });
 
