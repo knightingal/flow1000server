@@ -39,38 +39,36 @@ var init = function () {
             var header = eval("(" + fileBuff.slice(8, 8 + headerLen) + ")");
             console.log("headerLen = " + headerLen);
             console.log("header = " + JSON.stringify(header[3]));
-            /*
-            var picsOri = fs.readdirSync(RootDirString + dirs[i]);
-            var patt = new RegExp('\.jpg$');
+            
+            //var picsOri = fs.readdirSync(RootDirString + dirs[i]);
+            //var patt = new RegExp('\.jpg$');
 
-            var pics = [];
-            for (j = 0; j < picsOri.length; j++) {
-                if (patt.test(picsOri[j]) === true) {
-                    pics.push(picsOri[j]);
-                }
-            }
-            pics.sort(function(a, b) {
-                return parseInt(a) - parseInt(b);
-            });
-            var mtime = stat.mtime;
-            picDirs.dirStat.push({
-                "name": dirs[i],
-                "mtime": mtime,
-                "firstPic": pics[0],
-                "index": 0
-            });
-            */
+            //var pics = [];
+            //for (j = 0; j < picsOri.length; j++) {
+            //    if (patt.test(picsOri[j]) === true) {
+            //        pics.push(picsOri[j]);
+            //    }
+            //}
+            //pics.sort(function(a, b) {
+            //    return parseInt(a) - parseInt(b);
+            //});
+            //var mtime = stat.mtime;
+            //picDirs.dirStat.push({
+            //    "name": dirs[i],
+            //    "mtime": mtime,
+            //    "firstPic": pics[0],
+            //    "index": 0
+            //});
+            
         }
 
     }
-    /*
-    picDirs.dirStat.sort(function(a, b) {
-        return a.mtime.getTime() - b.mtime.getTime();
-    });
-    for (i = 0; i < picDirs.dirStat.length; i++) {
-        picDirs.dirStat[i]['index'] = i;
-    }
-    */
+    //picDirs.dirStat.sort(function(a, b) {
+    //    return a.mtime.getTime() - b.mtime.getTime();
+    //});
+    //for (i = 0; i < picDirs.dirStat.length; i++) {
+    //    picDirs.dirStat[i]['index'] = i;
+    //}
 }
 
 postMsg.initCb = init;
