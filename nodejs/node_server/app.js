@@ -12,7 +12,8 @@ var picDirs = require('./routes/picDirs');
 picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
-var RootDirString = '/home/knightingal/DevTools/.mix/1002/';
+//var RootDirString = '/home/knightingal/DevTools/.mix/1002/';
+var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
 picDirs.RootDirString = RootDirString;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,41 +35,41 @@ var init = function () {
         var stat = fs.statSync(RootDirString + dirName);
         if (stat.isDirectory())
         {
-            var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
-            var headerLen = parseInt(fileBuff.slice(0, 8));
-            var header = eval("(" + fileBuff.slice(8, 8 + headerLen) + ")");
-            console.log("headerLen = " + headerLen);
-            console.log("header = " + JSON.stringify(header[3]));
+            //var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
+            //var headerLen = parseInt(fileBuff.slice(0, 8));
+            //var header = eval("(" + fileBuff.slice(8, 8 + headerLen) + ")");
+            //console.log("headerLen = " + headerLen);
+            //console.log("header = " + JSON.stringify(header[3]));
             
-            //var picsOri = fs.readdirSync(RootDirString + dirs[i]);
-            //var patt = new RegExp('\.jpg$');
+            var picsOri = fs.readdirSync(RootDirString + dirs[i]);
+            var patt = new RegExp('\.jpg$');
 
-            //var pics = [];
-            //for (j = 0; j < picsOri.length; j++) {
-            //    if (patt.test(picsOri[j]) === true) {
-            //        pics.push(picsOri[j]);
-            //    }
-            //}
-            //pics.sort(function(a, b) {
-            //    return parseInt(a) - parseInt(b);
-            //});
-            //var mtime = stat.mtime;
-            //picDirs.dirStat.push({
-            //    "name": dirs[i],
-            //    "mtime": mtime,
-            //    "firstPic": pics[0],
-            //    "index": 0
-            //});
+            var pics = [];
+            for (j = 0; j < picsOri.length; j++) {
+                if (patt.test(picsOri[j]) === true) {
+                    pics.push(picsOri[j]);
+                }
+            }
+            pics.sort(function(a, b) {
+                return parseInt(a) - parseInt(b);
+            });
+            var mtime = stat.mtime;
+            picDirs.dirStat.push({
+                "name": dirs[i],
+                "mtime": mtime,
+                "firstPic": pics[0],
+                "index": 0
+            });
             
         }
 
     }
-    //picDirs.dirStat.sort(function(a, b) {
-    //    return a.mtime.getTime() - b.mtime.getTime();
-    //});
-    //for (i = 0; i < picDirs.dirStat.length; i++) {
-    //    picDirs.dirStat[i]['index'] = i;
-    //}
+    picDirs.dirStat.sort(function(a, b) {
+        return a.mtime.getTime() - b.mtime.getTime();
+    });
+    for (i = 0; i < picDirs.dirStat.length; i++) {
+        picDirs.dirStat[i]['index'] = i;
+    }
 }
 
 postMsg.initCb = init;

@@ -8,7 +8,7 @@ block content
           var index = obj.attributes.aindex.value;
           var picname = obj.attributes.apicname.value;
           var imgNode = document.getElementById("quick_img");
-          imgNode.src="http://127.0.0.1:8081/picDirs/picContent/" + index + "/" + picname;
+          imgNode.src="http://127.0.0.1:8081/picDirs/picRepository/" + index + "/" + picname;
           imgNode.style.display = "block";
         }
         function mOut(obj) {
@@ -27,7 +27,7 @@ block content
         p Welcome to #{title}
         each val in picList
           p
-            a(href="http://127.0.0.1:8081/picDirs?picpage=" + val.index,
+            a(href="http://127.0.0.1:8081/picDirs/picContent?picpage=" + val.index,
                 onmouseover="mOver(this)", onmouseout="mOut(this)", 
                 aindex=val.index, apicname=val.firstPic      
             )= val.name
