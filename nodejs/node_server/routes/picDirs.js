@@ -4,12 +4,11 @@ var fs = require('fs');
 //var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
 /* GET users listing. */
 var kn_creptor = require('../kn_creptor');
-router.get('/', function(req, res) {
-
-  if (req.query.picpage === undefined) {
+router.get(/\/picIndex/, function(req, res) {
     res.render('picIndex', {title: 'Index', picList: router.dirStat});
-  }
-  else {
+});
+
+router.get(/\/picContent/, function(req, res) {
     var dirName = router.dirStat[req.query.picpage].name;
     var dirsOri = fs.readdirSync(router.RootDirString + dirName);
     var patt = new RegExp('\.jpg$');
@@ -28,11 +27,10 @@ router.get('/', function(req, res) {
         'picpage': req.query.picpage, 
         'pics': dirs
     });
-  }
 
 });
 
-router.get(/\/picContent\/(\w+)\/(\w+\.jpg)/, function(req, res) {
+router.get(/\/picRepository\/(\w+)\/(\w+\.jpg)/, function(req, res) {
     var picpage = req.params[0];
     var pic = req.params[1];
     var dirName = router.dirStat[picpage].name;

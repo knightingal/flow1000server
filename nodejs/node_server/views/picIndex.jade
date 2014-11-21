@@ -2,36 +2,39 @@ extends layout
 
 block content
   
-  link(rel='stylesheet', href='/stylesheets/index.css')
-  script(type='text/javascript').
-    function mOver(obj) {
-      var index = obj.attributes.aindex.value;
-      var picname = obj.attributes.apicname.value;
-      var imgNode = document.getElementById("quick_img");
-      imgNode.src="http://127.0.0.1:8081/picDirs/picContent/" + index + "/" + picname;
-      imgNode.style.display = "block";
-    }
-    function mOut(obj) {
-      return;
-      var index = obj.attributes.aindex.value;
-      var imgNode = document.getElementById("quick_img");
-      imgNode.style.display = "none";
-      imgNode.src="";
+    link(rel='stylesheet', href='/stylesheets/index.css')
+    script(type='text/javascript').
+        function mOver(obj) {
+          var index = obj.attributes.aindex.value;
+          var picname = obj.attributes.apicname.value;
+          var imgNode = document.getElementById("quick_img");
+          imgNode.src="http://127.0.0.1:8081/picDirs/picRepository/" + index + "/" + picname;
+          imgNode.style.display = "block";
+        }
+        function mOut(obj) {
+          return;
+          var index = obj.attributes.aindex.value;
+          var imgNode = document.getElementById("quick_img");
+          imgNode.style.display = "none";
+          imgNode.src="";
 
-    }
-    function onLoad() {
-        console.log(window);
-        document.getElementById("img_container").style.height = window.innerHeight + "px";
-    }
-  div(class="left_list")
-    p Welcome to #{title}
-    each val in picList
-      p
-        a(href="http://127.0.0.1:8081/picDirs?picpage=" + val.index,
-        onmouseover="mOver(this)", onmouseout="mOut(this)", 
-        aindex=val.index, apicname=val.firstPic      
-        )= val.name
-        //img(id=val.index + "img", src="http://127.0.0.1:8081/picDirs/picContent/" + val.index + "/" + "1.jpg", class="littleimg", style="display: block")
-        //img(id=val.index + "img", src="", class="littleimg")
-  div(id="img_container", class="imc_container")
-    img(id="quick_img",class="littleimg", src="http://127.0.0.1:8081/picDirs/picContent/1/1.jpg")
+        }
+        function onLoad() {
+            console.log(window);
+            document.getElementById("img_container").style.height = window.innerHeight + "px";
+        }
+    div(class="left_list")
+        p Welcome to #{title}
+        each val in picList
+          p
+            a(href="http://127.0.0.1:8081/picDirs/picContent?picpage=" + val.index,
+                onmouseover="mOver(this)", onmouseout="mOut(this)", 
+                aindex=val.index, apicname=val.firstPic      
+            )= val.name
+    div(id="img_container", class="imc_container")
+      img(
+        id="quick_img" 
+        class="littleimg"
+        src="http://127.0.0.1:8081/picDirs/picRepository/1/1.jpg"
+      )
+
