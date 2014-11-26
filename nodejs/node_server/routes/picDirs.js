@@ -3,7 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 //var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
 /* GET users listing. */
-var kn_creptor = require('../kn_creptor');
+//var kn_creptor = require('../kn_creptor');
 router.get(/\/picIndex/, function(req, res) {
     res.render('picIndex', {title: 'Index', picList: router.dirStat});
 });
