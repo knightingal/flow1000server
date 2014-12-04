@@ -27,6 +27,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
+
 var init = function () {
     var dirs = fs.readdirSync(RootDirString); 
     picDirs.dirStat = [];
