@@ -45,11 +45,11 @@ var init = function () {
             var patt = new RegExp('\.jpg$');
 
             var pics = [];
-            for (j = 0; j < picsOri.length; j++) {
-                if (patt.test(picsOri[j]) === true) {
-                    pics.push(picsOri[j]);
+            picsOri.forEach(function(item) {
+                if (patt.test(item) === true) {
+                    pics.push(item);
                 }
-            }
+            });
             pics.sort(function(a, b) {
                 return parseInt(a) - parseInt(b);
             });
