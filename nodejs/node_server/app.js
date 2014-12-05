@@ -33,13 +33,15 @@ var init = function () {
     for (i = 0; i < dirs.length; i++) {
         var dirName = dirs[i];
         var stat = fs.statSync(RootDirString + dirName);
-        if (stat.isDirectory())
-        {
-            //var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
-            //var headerLen = parseInt(fileBuff.slice(0, 8));
-            //var header = eval("(" + fileBuff.slice(8, 8 + headerLen) + ")");
-            //console.log("headerLen = " + headerLen);
-            //console.log("header = " + JSON.stringify(header[3]));
+        if (stat.isDirectory()) {
+            if (false) {
+                var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
+                var headerLen = parseInt(fileBuff.slice(0, 8));
+                //var header = eval("(" + fileBuff.slice(8, 8 + headerLen) + ")");
+                var header = JSON.parse(fileBuff.slice(8, 8 + headerLen));
+                console.log("headerLen = " + headerLen);
+                console.log("header = " + JSON.stringify(header[3]));
+            }
             
             var picsOri = fs.readdirSync(RootDirString + dirs[i]);
             var patt = new RegExp('\.jpg$');
@@ -64,6 +66,7 @@ var init = function () {
         }
 
     }
+
     picDirs.dirStat.sort(function(a, b) {
         return a.mtime.getTime() - b.mtime.getTime();
     });
