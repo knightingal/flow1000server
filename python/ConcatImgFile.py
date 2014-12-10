@@ -5,8 +5,6 @@ import os
 RootDir = "/home/knightingal/DevTools/.mix/1002/"
 import json
 
-
-
 def concat_files(root, files):
     file_content_s = []
     file_length_s = []
