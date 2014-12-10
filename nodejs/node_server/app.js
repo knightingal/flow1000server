@@ -34,34 +34,18 @@ var init = function () {
         var dirName = dirs[i];
         var stat = fs.statSync(RootDirString + dirName);
         if (stat.isDirectory()) {
-            if (true) {
-                var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
-                var headerLen = parseInt(fileBuff.slice(0, 8));
-                var header = JSON.parse(fileBuff.slice(8, 8 + headerLen));
-                console.log("headerLen = " + headerLen);
-                console.log("header = " + JSON.stringify(header[3]));
-            }
-            else {            
-                var picsOri = fs.readdirSync(RootDirString + dirs[i]);
-                var patt = new RegExp('\.jpg$');
-
-                var pics = [];
-                picsOri.forEach(function(item) {
-                    if (patt.test(item) === true) {
-                        pics.push(item);
-                    }
-                });
-                pics.sort(function(a, b) {
-                    return parseInt(a) - parseInt(b);
-                });
-                var mtime = stat.mtime;
-                picDirs.dirStat.push({
-                    "name": dirs[i],
-                    "mtime": mtime,
-                    "firstPic": pics[0],
-                    "index": 0
-                });
-            }
+            var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
+            var headerLen = parseInt(fileBuff.slice(0, 8));
+            var header = JSON.parse(fileBuff.slice(8, 8 + headerLen));
+            var mtime = stat.mtime;
+            picDirs.dirStat.push({
+                "name": dirName,
+                "mtime": mtime,
+                "firstPic": null,
+                "index": 0,
+                "headerLen": headerLen,
+                "header": header
+            });
         }
     }
 
