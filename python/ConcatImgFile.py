@@ -30,7 +30,6 @@ def concat_files(root, files):
     fp.close()
 
 
-
 def concat_img_in_dir(dir_str):
     for root, dirs, files in os.walk(dir_str):
         if root == dir_str:
