@@ -12,8 +12,8 @@ var picDirs = require('./routes/picDirs');
 picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
-//var RootDirString = '/home/knightingal/DevTools/.mix/1002/';
-var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
+var RootDirString = '/home/knightingal/DevTools/.mix/1002/';
+//var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
 picDirs.RootDirString = RootDirString;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,31 +33,22 @@ var init = function () {
     for (i = 0; i < dirs.length; i++) {
         var dirName = dirs[i];
         var stat = fs.statSync(RootDirString + dirName);
-        if (stat.isDirectory())
-        {
-            var picsOri = fs.readdirSync(RootDirString + dirs[i]);
-            var patt = new RegExp('\.jpg$');
-
-            var pics = [];
-            for (j = 0; j < picsOri.length; j++) {
-                if (patt.test(picsOri[j]) === true) {
-                    pics.push(picsOri[j]);
-                }
-            }
-            pics.sort(function(a, b) {
-                return parseInt(a) - parseInt(b);
-            });
+        if (stat.isDirectory()) {
+            var fileBuff = fs.readFileSync(RootDirString + dirName + "/" + dirName);
+            var headerLen = parseInt(fileBuff.slice(0, 8));
+            var header = JSON.parse(fileBuff.slice(8, 8 + headerLen));
             var mtime = stat.mtime;
             picDirs.dirStat.push({
-                "name": dirs[i],
+                "name": dirName,
                 "mtime": mtime,
-                "firstPic": pics[0],
-                "index": 0
+                "firstPic": null,
+                "index": 0,
+                "headerLen": headerLen,
+                "header": header
             });
-            
         }
-
     }
+
     picDirs.dirStat.sort(function(a, b) {
         return a.mtime.getTime() - b.mtime.getTime();
     });

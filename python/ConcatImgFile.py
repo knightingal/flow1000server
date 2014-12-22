@@ -5,8 +5,6 @@ import os
 RootDir = "/home/knightingal/DevTools/.mix/1002/"
 import json
 
-
-
 def concat_files(root, files):
     file_content_s = []
     file_length_s = []
@@ -28,7 +26,6 @@ def concat_files(root, files):
     for file_content in file_content_s:
         fp.write(file_content)
     fp.close()
-
 
 
 def concat_img_in_dir(dir_str):
