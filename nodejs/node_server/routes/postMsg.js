@@ -22,7 +22,7 @@ function ReqHeadersTemp(pageHref) {
 
 var gImgCount = 0;
 var gSuccCount = 0;
-
+//TODO: so many anonymous function, and callback hell!!!
 router.post('/', function(req, res) {
     console.log(req.body);
     res.send('ok');
