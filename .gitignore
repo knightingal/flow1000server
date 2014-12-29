@@ -1,0 +1,6 @@
+*.xml
+*.log
+*.xpi
+*.iml
+*.pyc
+.name
