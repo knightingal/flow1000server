@@ -3,7 +3,9 @@ var router = express.Router();
 var fs = require('fs');
 //var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
 /* GET users listing. */
-var kn_creptor = require('../kn_creptor');
+
+//var kn_creptor = require('../kn_creptor');
+
 router.get(/\/picIndexAjax/, function(req, res) {
     res.send(JSON.stringify(router.dirStat));
 });
@@ -36,7 +38,7 @@ router.get(/\/picContentAjax/, function(req, res) {
 router.get(/\/picContent/, function(req, res) {
     var dirName = router.dirStat[req.query.picpage].name;
     var dirsOri = fs.readdirSync(router.RootDirString + dirName);
-    var patt = new RegExp('\.jpg$');
+    var patt = new RegExp('\.[jJ][pP][gG]$');
     var dirs = [];
     for (i = 0; i < dirsOri.length; i++) {
         if (patt.test(dirsOri[i]) === true) {
@@ -55,7 +57,7 @@ router.get(/\/picContent/, function(req, res) {
 
 });
 
-router.get(/\/picRepository\/(\w+)\/(\w+\.jpg)/, function(req, res) {
+router.get(/\/picRepository\/(\w+)\/(\S+\.[jJ][pP][gG])/, function(req, res) {
     var picpage = req.params[0];
     var pic = req.params[1];
     var dirName = router.dirStat[picpage].name;

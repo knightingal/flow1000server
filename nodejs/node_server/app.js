@@ -13,7 +13,7 @@ picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
 //var RootDirString = '/home/knightingal/DevTools/.mix/1002/';
-var RootDirString = '/home/knightingal/Downloads/.mix/1000/';
+var RootDirString = 'D:\\testdir\\testsubdir\\thr\\from linux\\';
 picDirs.RootDirString = RootDirString;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +25,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 
 var init = function () {
