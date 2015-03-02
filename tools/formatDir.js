@@ -29,7 +29,17 @@ function main() {
         return a.mtime.getTime() - b.mtime.getTime();
     });
     for (i = 0; i < picDirs.length; i++) {
-        console.log(picDirs[i].dirName + " " + picDirs[i].mtime);
+        function getTrulyNumber(num) {
+            return num < 10 ? "0" + num : "" + num;
+        }
+        console.log(picDirs[i].dirName + " " 
+                + picDirs[i].mtime.getFullYear()
+                + getTrulyNumber(picDirs[i].mtime.getMonth() + 1)
+                + getTrulyNumber(picDirs[i].mtime.getDate())
+                + getTrulyNumber(picDirs[i].mtime.getHours())
+                + getTrulyNumber(picDirs[i].mtime.getMinutes())
+                + getTrulyNumber(picDirs[i].mtime.getSeconds())
+                );
     }
 
 
