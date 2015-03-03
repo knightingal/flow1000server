@@ -61,7 +61,7 @@ var init = function () {
 
     }
     picDirs.dirStat.sort(function(a, b) {
-        return a.mtime.getTime() - b.mtime.getTime();
+        return a.name - b.name;
     });
     for (i = 0; i < picDirs.dirStat.length; i++) {
         picDirs.dirStat[i]['index'] = i;
