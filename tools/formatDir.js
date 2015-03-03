@@ -32,14 +32,21 @@ function main() {
         function getTrulyNumber(num) {
             return num < 10 ? "0" + num : "" + num;
         }
-        console.log(picDirs[i].dirName + " " 
-                + picDirs[i].mtime.getFullYear()
+        //console.log(picDirs[i].mtime.getFullYear()
+        //        + getTrulyNumber(picDirs[i].mtime.getMonth() + 1)
+        //        + getTrulyNumber(picDirs[i].mtime.getDate())
+        //        + getTrulyNumber(picDirs[i].mtime.getHours())
+        //        + getTrulyNumber(picDirs[i].mtime.getMinutes())
+        //        + getTrulyNumber(picDirs[i].mtime.getSeconds())
+        //        + picDirs[i].dirName);
+        fs.renameSync(RootDirString + picDirs[i].dirName,
+               RootDirString + picDirs[i].mtime.getFullYear()
                 + getTrulyNumber(picDirs[i].mtime.getMonth() + 1)
                 + getTrulyNumber(picDirs[i].mtime.getDate())
                 + getTrulyNumber(picDirs[i].mtime.getHours())
                 + getTrulyNumber(picDirs[i].mtime.getMinutes())
                 + getTrulyNumber(picDirs[i].mtime.getSeconds())
-                );
+                + picDirs[i].dirName);
     }
 
 
