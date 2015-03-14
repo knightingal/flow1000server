@@ -35,8 +35,7 @@ var init = function () {
     for (i = 0; i < dirs.length; i++) {
         var dirName = dirs[i];
         var stat = fs.statSync(RootDirString + dirName);
-        if (stat.isDirectory())
-        {
+        if (stat.isDirectory()) {
             var picsOri = fs.readdirSync(RootDirString + dirs[i]);
             var patt = new RegExp('\.jpg$');
 
@@ -56,12 +55,16 @@ var init = function () {
                 "firstPic": pics[0],
                 "index": 0
             });
-            
         }
-
     }
     picDirs.dirStat.sort(function(a, b) {
-        return a.name - b.name;
+        //return a.name - b.name;
+        for (i = 0; i < 14; i++) {
+            if (a.name[i] != b.name[i]) {
+                return a.name[i] - b.name[i];
+            }
+        }
+        return -1;
     });
     for (i = 0; i < picDirs.dirStat.length; i++) {
         picDirs.dirStat[i]['index'] = i;
