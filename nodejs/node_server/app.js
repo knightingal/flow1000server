@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var os = require('os');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -12,8 +13,12 @@ var picDirs = require('./routes/picDirs');
 picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
-var RootDirString = '/home/knightingal/download/';
-//var RootDirString = 'D:\\testdir\\testsubdir\\thr\\from linux\\';
+if (os.platform() === "win32") {
+    var RootDirString = 'D:\\testdir\\testsubdir\\thr\\from linux\\';
+} else {
+    var RootDirString = '/home/knightingal/download/';
+}
+
 picDirs.RootDirString = RootDirString;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
