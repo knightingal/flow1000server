@@ -14,7 +14,7 @@ picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
 if (os.platform() === "win32") {
-    var RootDirString = 'D:\\testdir\\testsubdir\\thr\\from linux\\';
+    var RootDirString = 'D:\\Python27\\testdir\\';
 } else {
     var RootDirString = '/home/knightingal/download/';
 }
@@ -128,3 +128,10 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+// var debug = require('debug')('first_node_app');
+// app.set('port', process.env.PORT || 8081);
+
+// var server = app.listen(app.get('port'), function() {
+//   console.log('Express server listening on port ' + JSON.stringify(server.address()));
+// });
