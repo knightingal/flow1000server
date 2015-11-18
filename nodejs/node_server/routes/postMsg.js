@@ -22,14 +22,42 @@ function ReqHeadersTemp() {
 
 var gImgCount = 0;
 var gSuccCount = 0;
+
+function getHttpReqCallback(fileName, dirName) {
+    return function (res) {
+        bufferArray[fileName] = [];
+        res.on('data', (function(fileName) {
+            return function (chunk) {
+                var buffer = new Buffer(chunk);
+                bufferArray[fileName].push(buffer);
+            };
+        })(fileName));
+        res.on('end', (function(fileName) {
+            return function() {
+                var totalBuff = Buffer.concat(bufferArray[fileName]);
+                fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
+                gSuccCount += 1;
+                console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
+
+                if (gSuccCount == gImgCount) {
+                    console.log("all task succ!");
+                    gImgCount = gSuccCount = 0;
+                    router.initCb();
+                }
+            };
+        })(fileName))
+    };
+}
+
+
 //TODO: so many anonymous function, and callback hell!!!
 router.post('/', function(req, res) {
     console.log(req.body);
     res.send('ok');
-    // for (j = 0; j < req.body.length; j++) {
     gImgCount += req.body.imgSrcArray.length;
-    // // // }
     var dirName = RootDirString + req.body.title;
+    
+    
     fs.mkdir(dirName, function() {
         
         console.log(req.body.imgSrcArray);
@@ -38,41 +66,16 @@ router.post('/', function(req, res) {
         var imgSrcArray = req.body.imgSrcArray;
         // var pageHref = req.body[j].href;
         for (var i = 0; i < imgSrcArray.length; i++) {
-            
-            var urlObj = url.parse(imgSrcArray[i]);
-            var fileName = path.basename(imgSrcArray[i]);
+            var imgSrc = imgSrcArray[i];
+            var urlObj = url.parse(imgSrc);
+            var fileName = path.basename(imgSrc);
             var options = {
                 host: urlObj.host,
                 path: urlObj.path,
                 headers: new ReqHeadersTemp()
             };
-            reqs[fileName] = http.request(options, (function(fileName) {
-                return function (res) {
-                    var contentLength = res.headers['content-length'];
-                    bufferArray[fileName] = [];
-                    res.on('data', (function(fileName) {
-                        return function (chunk) {
-                            var buffer = new Buffer(chunk);
-                            bufferArray[fileName].push(buffer);
-                        };
-                    })(fileName));
-                    res.on('end', (function(fileName) {
-                        return function() {
-                            var totalBuff = Buffer.concat(bufferArray[fileName]);
-                            fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
-                            gSuccCount += 1;
-                            console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
-
-                            if (gSuccCount == gImgCount) {
-                                console.log("all task succ!");
-                                gImgCount = gSuccCount = 0;
-                                router.initCb();
-                            }
-                        };
-                    })(fileName));
-                    
-                };
-            })(fileName));
+            
+            reqs[fileName] = http.request(options, getHttpReqCallback(fileName, dirName));
             reqs[fileName].on('error', function(e) {
                        console.log('problem with request: ' + e.message); 
                     });
