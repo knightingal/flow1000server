@@ -5,8 +5,8 @@ var fs = require("fs");
 var url = require('url');
 var path = require('path');
 
-var reqs = {};
-var bufferArray = {};
+// var reqs = {};
+// var bufferArray = {};
 
 var RootDirString = 'D:\\Python27\\testdir\\testsubdir\\';
 
@@ -25,16 +25,16 @@ var gSuccCount = 0;
 
 function getHttpReqCallback(fileName, dirName) {
     return function (res) {
-        bufferArray[fileName] = [];
+        var fileBuff = [];
         res.on('data', (function(fileName) {
             return function (chunk) {
                 var buffer = new Buffer(chunk);
-                bufferArray[fileName].push(buffer);
+                fileBuff.push(buffer);
             };
         })(fileName));
         res.on('end', (function(fileName) {
             return function() {
-                var totalBuff = Buffer.concat(bufferArray[fileName]);
+                var totalBuff = Buffer.concat(fileBuff);
                 fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
                 gSuccCount += 1;
                 console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
@@ -49,6 +49,27 @@ function getHttpReqCallback(fileName, dirName) {
     };
 }
 
+function startDownload(imgSrc, dirName) {
+    var urlObj = url.parse(imgSrc);
+    var fileName = path.basename(imgSrc);
+    var options = {
+        host: urlObj.host,
+        path: urlObj.path,
+        headers: new ReqHeadersTemp()
+    };
+    
+    var req = http.request(options, getHttpReqCallback(fileName, dirName));
+    req.setTimeout(60 * 1000, function() {
+        console.log(imgSrc + 'timeout, try again...');
+        req.abort();
+        startDownload(imgSrc, dirName); 
+    });
+    req.on('error', function(e) {
+        startDownload(imgSrc, dirName);             
+    });
+    
+    req.end();
+}
 
 //TODO: so many anonymous function, and callback hell!!!
 router.post('/', function(req, res) {
@@ -67,19 +88,7 @@ router.post('/', function(req, res) {
         // var pageHref = req.body[j].href;
         for (var i = 0; i < imgSrcArray.length; i++) {
             var imgSrc = imgSrcArray[i];
-            var urlObj = url.parse(imgSrc);
-            var fileName = path.basename(imgSrc);
-            var options = {
-                host: urlObj.host,
-                path: urlObj.path,
-                headers: new ReqHeadersTemp()
-            };
-            
-            reqs[fileName] = http.request(options, getHttpReqCallback(fileName, dirName));
-            reqs[fileName].on('error', function(e) {
-                       console.log('problem with request: ' + e.message); 
-                    });
-            reqs[fileName].end();
+            startDownload(imgSrc, dirName)
         }
         
     });
