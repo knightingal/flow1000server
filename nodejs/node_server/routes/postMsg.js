@@ -4,7 +4,21 @@ var http = require("http");
 var fs = require("fs");
 var url = require('url');
 var path = require('path');
+var EventEmitter = require('events');
 
+function DEventEmitter() {
+    EventEmitter.call(this);
+}
+
+require('util').inherits(DEventEmitter, EventEmitter)
+var dEmitter = new DEventEmitter();
+
+dEmitter.on("next", function(dirName) {
+    var currentImg = ImgSrcArray.getCurrentImg();
+    if (currentImg != undefined) {
+        startDownload(currentImg, dirName);
+    }
+});
 // var reqs = {};
 // var bufferArray = {};
 
@@ -46,12 +60,13 @@ function getHttpReqCallback(fileName, dirName) {
                 fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
                 gSuccCount += 1;
                 console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
-
+                
                 if (gSuccCount == gImgCount) {
                     console.log("all task succ!");
                     gImgCount = gSuccCount = 0;
                     router.initCb();
                 }
+                dEmitter.emit("next", dirName);
             };
         })(fileName, contentLength))
     };
@@ -81,51 +96,83 @@ function startDownload(imgSrc, dirName) {
 
 function downloadFor20(imgSrcArray, dirName) {
   for (var i = 0; i < imgSrcArray.length; i++) {
-      var imgSrc = imgSrcArray[i].imrSrc;
+    //   var imgSrc = imgSrcArray[i].imrSrc;
+      var imgSrc = imgSrcArray[i];
       startDownload(imgSrc, dirName)
   }
 }
 
+var ImgSrcArray = {
+    "imgSrcArray": [],
+    "currentIndex": 0,
+    "getCurrentImg": function() {
+        return this.imgSrcArray[this.currentIndex++];
+    },
+    "get20Img": function() {
+        this.currentIndex = 10;
+        return this.imgSrcArray.slice(0, 10);
+    },
+};
+
 router.post('/donwLoadNavy', function(req, res) {
   console.log(req.body);
-  res.send("ok");
+  
   gImgCount += req.body.imgArray.length;
-  var dirName = RootDirString + req.body.title;
-
+  var nowTime = new Date(Date.now());
+  var nowString = "" + nowTime.getFullYear() + 
+    ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) + 
+    (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) + 
+    (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+ 
+    (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) + 
+    (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
+  var title = nowString + req.body.title;
+  var dirName = RootDirString + title;
+  res.send(title);
   fs.mkdir(dirName, function() {
     console.log(req.body.imgArray);
-    var imgSrcArray = req.body.imgArray;
-    // downloadFor20(imgSrcArray.slice(0, 20), dirName)
-    for (var i = 0; i < imgSrcArray.length; i++) {
-      var imgSrc = imgSrcArray[i].imrSrc;
-      startDownload(imgSrc, dirName);
-    }
+    ImgSrcArray.imgSrcArray = req.body.imgArray;
+    // var imgSrcArray = req.body.imgArray;
+    ImgSrcArray.currentIndex = 0;
+    downloadFor20(ImgSrcArray.get20Img(), dirName);
+    // for (var i = 0; i < imgSrcArray.length; i++) {
+    //   var imgSrc = imgSrcArray[i].imrSrc;
+    //   startDownload(imgSrc, dirName);
+    // }
   });
 });
 
 //TODO: so many anonymous function, and callback hell!!!
 router.post('/', function(req, res) {
     console.log(req.body);
-    res.send('ok');
+    
     gImgCount += req.body.imgSrcArray.length;
-    var dirName = RootDirString + req.body.title;
-
-
+    var nowTime = new Date(Date.now());
+    var nowString = "" + nowTime.getFullYear() + 
+        ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) + 
+        (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) + 
+        (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+ 
+        (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) + 
+        (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
+    var title = nowString + req.body.title;
+    
+    
+    var dirName = RootDirString + title;
+    res.send(title);
+    
     fs.mkdir(dirName, function() {
-
         console.log(req.body.imgSrcArray);
         console.log(req.body.href);
-
         var imgSrcArray = req.body.imgSrcArray;
-
+        ImgSrcArray.imgSrcArray = imgSrcArray;
+        ImgSrcArray.currentIndex = 0;
+        downloadFor20(ImgSrcArray.get20Img(), dirName);
+        
         // var pageHref = req.body[j].href;
-        for (var i = 0; i < imgSrcArray.length; i++) {
-            var imgSrc = imgSrcArray[i];
-            startDownload(imgSrc, dirName)
-        }
-
+        // for (var i = 0; i < imgSrcArray.length; i++) {
+        //     var imgSrc = imgSrcArray[i];
+        //     startDownload(imgSrc, dirName);
+        // }
     });
-
 });
 
 module.exports = router;
