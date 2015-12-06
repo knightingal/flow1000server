@@ -22,7 +22,7 @@ dEmitter.on("next", function(dirName) {
 // var reqs = {};
 // var bufferArray = {};
 
-var RootDirString = 'D:\\Python27\\testdir\\testsubdir\\';
+var RootDirString = 'D:\\Python27\\testdir\\testsubdir\\linux1000\\';
 
 function ReqHeadersTemp() {
     // this["Referer"] = pageHref;
@@ -158,7 +158,7 @@ router.post('/', function(req, res) {
     
     var dirName = RootDirString + title;
     res.send(title);
-    
+    gSuccCount = 0;
     fs.mkdir(dirName, function() {
         console.log(req.body.imgSrcArray);
         console.log(req.body.href);
