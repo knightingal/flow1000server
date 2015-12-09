@@ -6,6 +6,7 @@ var url = require('url');
 var path = require('path');
 var EventEmitter = require('events');
 
+
 function DEventEmitter() {
     EventEmitter.call(this);
 }
@@ -19,8 +20,6 @@ dEmitter.on("next", function(dirName) {
         startDownload(currentImg, dirName);
     }
 });
-// var reqs = {};
-// var bufferArray = {};
 
 var RootDirString = 'D:\\Python27\\testdir\\testsubdir\\linux1000\\';
 
@@ -36,6 +35,7 @@ function ReqHeadersTemp() {
 
 var gImgCount = 0;
 var gSuccCount = 0;
+
 
 function getHttpReqCallback(imgSrc, dirName) {
     var fileName = path.basename(imgSrc);
@@ -102,19 +102,16 @@ function downloadNavyFor20(imgSrcArray, dirName) {
     }
 }
 
-function downloadFor20(imgSrcArray, dirName) {
-    for (var i = 0; i < imgSrcArray.length; i++) {
-        //   var imgSrc = imgSrcArray[i].imrSrc;
-        var imgSrc = imgSrcArray[i];
-        startDownload(imgSrc, dirName)
-    }
-}
-
 var ImgSrcArray = {
     "imgSrcArray": [],
     "currentIndex": 0,
     "getCurrentImg": function() {
-        return this.imgSrcArray[this.currentIndex++];
+        var temp = this.imgSrcArray[this.currentIndex++];
+        if (temp != undefined) {
+            return temp.imrSrc;
+        } else {
+            return undefined;
+        }
     },
     "get20Img": function() {
         this.currentIndex = 10;
@@ -122,38 +119,31 @@ var ImgSrcArray = {
     },
 };
 
-//TODO: so many anonymous function, and callback hell!!!
-router.post('/', function(req, res) {
-    console.log(req.body);
-    
-    gImgCount += req.body.imgSrcArray.length;
-    var nowTime = new Date(Date.now());
-    var nowString = "" + nowTime.getFullYear() + 
-        ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) + 
-        (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) + 
-        (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+ 
-        (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) + 
-        (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
-    var title = nowString + req.body.title;
-    
-    
-    var dirName = RootDirString + title;
-    res.send(title);
-    gSuccCount = 0;
-    fs.mkdir(dirName, function() {
-        console.log(req.body.imgSrcArray);
-        console.log(req.body.href);
-        var imgSrcArray = req.body.imgSrcArray;
-        ImgSrcArray.imgSrcArray = imgSrcArray;
-        ImgSrcArray.currentIndex = 0;
-        downloadFor20(ImgSrcArray.get20Img(), dirName);
-        
-        // var pageHref = req.body[j].href;
-        // for (var i = 0; i < imgSrcArray.length; i++) {
-        //     var imgSrc = imgSrcArray[i];
-        //     startDownload(imgSrc, dirName);
-        // }
-    });
+router.post('/donwLoadNavy', function(req, res) {
+  console.log(req.body);
+  
+  gImgCount += req.body.imgArray.length;
+  var nowTime = new Date(Date.now());
+  var nowString = "" + nowTime.getFullYear() + 
+    ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) + 
+    (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) + 
+    (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+ 
+    (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) + 
+    (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
+  var title = nowString + req.body.title;
+  var dirName = RootDirString + title;
+  res.send(title);
+  fs.mkdir(dirName, function() {
+    console.log(req.body.imgArray);
+    ImgSrcArray.imgSrcArray = req.body.imgArray;
+    // var imgSrcArray = req.body.imgArray;
+    ImgSrcArray.currentIndex = 0;
+    downloadNavyFor20(ImgSrcArray.get20Img(), dirName);
+    // for (var i = 0; i < imgSrcArray.length; i++) {
+    //   var imgSrc = imgSrcArray[i].imrSrc;
+    //   startDownload(imgSrc, dirName);
+    // }
+  });
 });
 
 module.exports = router;

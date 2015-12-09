@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var postMsg = require('./routes/postMsg');
 var picDirs = require('./routes/picDirs');
+var navy = require('./routes/navy');
 picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
@@ -83,6 +84,7 @@ init();
 app.use('/', routes);
 app.use('/users', users);
 app.use('/startDownload', postMsg);
+app.use('/navy', navy);
 app.use('/picDirs', picDirs);
 
 app.post('/testExist', function(req, res){
