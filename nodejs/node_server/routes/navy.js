@@ -15,9 +15,10 @@ require('util').inherits(DEventEmitter, EventEmitter)
 var dEmitter = new DEventEmitter();
 
 dEmitter.on("next", function(dirName) {
+    var index = ImgSrcArray.currentIndex;
     var currentImg = ImgSrcArray.getCurrentImg();
     if (currentImg != undefined) {
-        startDownload(currentImg, dirName);
+        startDownload(currentImg, dirName, index);
     }
 });
 
@@ -37,44 +38,47 @@ var gImgCount = 0;
 var gSuccCount = 0;
 
 
-function getHttpReqCallback(imgSrc, dirName) {
-    var fileName = path.basename(imgSrc);
+function getHttpReqCallback(imgSrc, dirName, index) {
+    var fileName = index + "-" + path.basename(imgSrc);
     return function (res) {
       // console.log('STATUS: ' + res.statusCode);
       // console.log('HEADERS: ' + JSON.stringify(res.headers));
         var contentLength = parseInt(res.headers['content-length']);
         var fileBuff = [];
-        res.on('data', (function(fileName) {
-            return function (chunk) {
-                var buffer = new Buffer(chunk);
-                fileBuff.push(buffer);
-            };
-        })(fileName));
-        res.on('end', (function(fileName, contentLength) {
-            return function() {
-                var totalBuff = Buffer.concat(fileBuff);
-                console.log("bufferLenght = " + totalBuff.length + ", this contentLength = " + contentLength);
-                if (totalBuff.length < contentLength) {
-                    console.log(imgSrc + " download error, try again");                    
-                    startDownload(imgSrc, dirName);
-                    return;
-                }
-                fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
-                gSuccCount += 1;
-                console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
+        res.on('data', function (chunk) {
+            var buffer = new Buffer(chunk);
+            fileBuff.push(buffer);
+        });
+        res.on('end', function() {
+            var totalBuff = Buffer.concat(fileBuff);
+            console.log("bufferLenght = " + totalBuff.length + ", this contentLength = " + contentLength);
+            
+            
+            if (!isNaN(contentLength) && totalBuff.length < contentLength) {
+                console.log(imgSrc + " download error, try again");                    
+                startDownload(imgSrc, dirName, index);
+                return;
+            }
+            if (isNaN(contentLength)) {
+                console.log(imgSrc + " content length error");
+                fs.appendFile(dirName + "/" + fileName + ".log", "error", function(err){if (err) {console.error(err)}});
                 
-                if (gSuccCount == gImgCount) {
-                    console.log("all task succ!");
-                    gImgCount = gSuccCount = 0;
-                    //router.initCb();
-                }
-                dEmitter.emit("next", dirName);
-            };
-        })(fileName, contentLength));
+            } else {
+                fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
+            }
+            gSuccCount += 1;
+            console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
+            
+            if (gSuccCount == gImgCount) {
+                console.log("all task succ!");
+                gImgCount = gSuccCount = 0;
+            }
+            dEmitter.emit("next", dirName);
+        });
     };
 }
 
-function startDownload(imgSrc, dirName) {
+function startDownload(imgSrc, dirName, index) {
     var urlObj = url.parse(imgSrc);
     // var fileName = path.basename(imgSrc);
     var options = {
@@ -83,13 +87,13 @@ function startDownload(imgSrc, dirName) {
         headers: new ReqHeadersTemp()
     };
 
-    var req = http.request(options, getHttpReqCallback(imgSrc, dirName));
+    var req = http.request(options, getHttpReqCallback(imgSrc, dirName, index));
     req.setTimeout(60 * 1000, function() {
         console.log(imgSrc + 'timeout');
         req.abort();
     });
     req.on('error', function(e) {
-        startDownload(imgSrc, dirName);
+        startDownload(imgSrc, dirName, index);
     });
 
     req.end();
@@ -98,7 +102,8 @@ function startDownload(imgSrc, dirName) {
 function downloadNavyFor20(imgSrcArray, dirName) {
     for (var i = 0; i < imgSrcArray.length; i++) {
         var imgSrc = imgSrcArray[i].imrSrc;
-        startDownload(imgSrc, dirName);
+        var index = i;
+        startDownload(imgSrc, dirName, index);
     }
 }
 
@@ -136,13 +141,8 @@ router.post('/donwLoadNavy', function(req, res) {
   fs.mkdir(dirName, function() {
     console.log(req.body.imgArray);
     ImgSrcArray.imgSrcArray = req.body.imgArray;
-    // var imgSrcArray = req.body.imgArray;
     ImgSrcArray.currentIndex = 0;
     downloadNavyFor20(ImgSrcArray.get20Img(), dirName);
-    // for (var i = 0; i < imgSrcArray.length; i++) {
-    //   var imgSrc = imgSrcArray[i].imrSrc;
-    //   startDownload(imgSrc, dirName);
-    // }
   });
 });
 
