@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 var init = function () {
-    var dirs = fs.readdirSync(RootDirString); 
+    var dirs = fs.readdirSync(RootDirString);
     picDirs.dirStat = [];
     for (i = 0; i < dirs.length; i++) {
         var dirName = dirs[i];
@@ -130,6 +130,15 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+var debug = require('debug')('first_node_app');
+// var app = require('../app');
+
+app.set('port', process.env.PORT || 8081);
+
+var server = app.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + JSON.stringify(server.address()));
+});
 
 // var debug = require('debug')('first_node_app');
 // app.set('port', process.env.PORT || 8081);
