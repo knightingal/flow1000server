@@ -52,23 +52,23 @@ function getHttpReqCallback(imgSrc, dirName, index) {
         res.on('end', function() {
             var totalBuff = Buffer.concat(fileBuff);
             console.log("bufferLenght = " + totalBuff.length + ", this contentLength = " + contentLength);
-            
-            
+
+
             if (!isNaN(contentLength) && totalBuff.length < contentLength) {
-                console.log(imgSrc + " download error, try again");                    
+                console.log(imgSrc + " download error, try again");
                 startDownload(imgSrc, dirName, index);
                 return;
             }
             if (isNaN(contentLength)) {
                 console.log(imgSrc + " content length error");
                 fs.appendFile(dirName + "/" + fileName + ".log", "error", function(err){if (err) {console.error(err)}});
-                
+
             } else {
                 fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
             }
             gSuccCount += 1;
             console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
-            
+
             if (gSuccCount == gImgCount) {
                 console.log("all task succ!");
                 gImgCount = gSuccCount = 0;
@@ -101,7 +101,7 @@ function startDownload(imgSrc, dirName, index) {
 
 function downloadNavyFor20(imgSrcArray, dirName) {
     for (var i = 0; i < imgSrcArray.length; i++) {
-        var imgSrc = imgSrcArray[i].imrSrc;
+        var imgSrc = imgSrcArray[i];
         var index = i;
         startDownload(imgSrc, dirName, index);
     }
@@ -113,7 +113,7 @@ var ImgSrcArray = {
     "getCurrentImg": function() {
         var temp = this.imgSrcArray[this.currentIndex++];
         if (temp != undefined) {
-            return temp.imrSrc;
+            return temp;
         } else {
             return undefined;
         }
@@ -125,25 +125,26 @@ var ImgSrcArray = {
 };
 
 router.post('/donwLoadNavy', function(req, res) {
-  console.log(req.body);
-  
-  gImgCount += req.body.imgArray.length;
+  // console.log(req.body);
+
+  gImgCount += req.body["ship_pic_url_list"].length;
   var nowTime = new Date(Date.now());
-  var nowString = "" + nowTime.getFullYear() + 
-    ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) + 
-    (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) + 
-    (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+ 
-    (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) + 
+  var nowString = "" + nowTime.getFullYear() +
+    ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) +
+    (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) +
+    (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+
+    (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) +
     (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
-  var title = nowString + req.body.title;
+  var title = nowString + req.body.name;
   var dirName = RootDirString + title;
   res.send(title);
   fs.mkdir(dirName, function() {
     console.log(req.body.imgArray);
-    ImgSrcArray.imgSrcArray = req.body.imgArray;
+    ImgSrcArray.imgSrcArray = req.body["ship_pic_url_list"];
     ImgSrcArray.currentIndex = 0;
     downloadNavyFor20(ImgSrcArray.get20Img(), dirName);
   });
+
 });
 
 module.exports = router;
