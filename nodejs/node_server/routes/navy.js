@@ -125,9 +125,9 @@ var ImgSrcArray = {
 };
 
 router.post('/donwLoadNavy', function(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
 
-  gImgCount += req.body.ship_pic_url_list.length;
+  gImgCount += req.body["ship_pic_url_list"].length;
   var nowTime = new Date(Date.now());
   var nowString = "" + nowTime.getFullYear() +
     ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) +
@@ -139,11 +139,12 @@ router.post('/donwLoadNavy', function(req, res) {
   var dirName = RootDirString + title;
   res.send(title);
   fs.mkdir(dirName, function() {
-    console.log(req.body.ship_pic_url_list);
-    ImgSrcArray.imgSrcArray = req.body.ship_pic_url_list;
+    console.log(req.body.imgArray);
+    ImgSrcArray.imgSrcArray = req.body["ship_pic_url_list"];
     ImgSrcArray.currentIndex = 0;
     downloadNavyFor20(ImgSrcArray.get20Img(), dirName);
   });
+
 });
 
 module.exports = router;
