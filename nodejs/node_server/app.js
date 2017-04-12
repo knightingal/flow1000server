@@ -15,7 +15,7 @@ picDirs.dirStat = [];
 var app = express();
 var fs = require('fs');
 if (os.platform() === "win32") {
-    var RootDirString = 'D:\\Python27\\testdir\\';
+    var RootDirString = 'D:\\Games\\linux1000\\';
 } else {
     var RootDirString = '/home/knightingal/download/';
 }
