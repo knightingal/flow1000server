@@ -1,4 +1,5 @@
 var express = require('express');
+const CryptoJS = require("crypto-js");
 var router = express.Router();
 var http = require("http");
 var fs = require("fs");
@@ -22,23 +23,50 @@ dEmitter.on("next", function(dirName) {
 // var reqs = {};
 // var bufferArray = {};
 
-var RootDirString = 'D:\\Games\\linux1000\\';
+var RootDirString = 'D:\\Games\\linux1000\\source\\';
+var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
 
-function ReqHeadersTemp() {
+function ReqHeadersTemp(ref) {
     // this["Referer"] = pageHref;
-    this["User-Agent"]= "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.63 Safari/537.31";
+    this["User-Agent"]= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
     this["Connection"]= "keep-alive";
-    this["Accept"]= "*/*";
+    this["Accept"]= "image/webp,image/*,*/*;q=0.8";
     this["Accept-Encoding"]= "gzip,deflate,sdch";
     this["Accept-Language"]= "zh-CN,zh;q=0.8";
-    this["Accept-Charset"]= "GBK,utf-8;q=0.7,*;q=0.3";
+    // this["Accept-Charset"]= "GBK,utf-8;q=0.7,*;q=0.3";
+    this["Referer"]=ref
+    this["Pragma"]="no-cache"
+    this["Cache-Control"]="no-cache"
+    this["Host"]="531.1000yishu.com"
 }
 
 var gImgCount = 0;
 var gSuccCount = 0;
+const key = CryptoJS.enc.Utf8.parse(""); //16位
+const iv = CryptoJS.enc.Utf8.parse("2017041621251234");
+
+const encyptoArray = (array) => {
+    var words = CryptoJS.lib.WordArray;
+    words.init(array);
+    var encrypted = CryptoJS.AES.encrypt(words, key, {
+        iv: iv,
+        mode:CryptoJS.mode.CFB, 
+        padding: CryptoJS.pad.ZeroPadding
+    });
+
+    var uI8Array = new Uint8Array(encrypted.ciphertext.words.length * 4);
+    encrypted.ciphertext.words.forEach((word, index) => {
+        uI8Array[index * 4 + 3] = word & 0xff;
+        uI8Array[index * 4 + 2] = word >>> 8 & 0xff;
+        uI8Array[index * 4 + 1] = word >>> 16 & 0xff;
+        uI8Array[index * 4] = word >>> 24 & 0xff;
+    });
+
+    return  uI8Array.slice(0, encrypted.ciphertext.sigBytes);
+}
 
 function getHttpReqCallback(imgSrc, dirName) {
-    var fileName = path.basename(imgSrc);
+    var fileName = path.basename(imgSrc.src);
     return function (res) {
       // console.log('STATUS: ' + res.statusCode);
       // console.log('HEADERS: ' + JSON.stringify(res.headers));
@@ -59,7 +87,10 @@ function getHttpReqCallback(imgSrc, dirName) {
                     startDownload(imgSrc, dirName);
                     return;
                 }
-                fs.appendFile(dirName + "/" + fileName, totalBuff, function(err){});
+                var totalArray = Uint8Array.from(totalBuff);
+                var encrytedArray = encyptoArray(totalArray);
+                fs.appendFile(dirName[0] + "/" + fileName, totalBuff, function(err){});
+                fs.appendFile(dirName[1] + "/" + fileName + ".bin", encrytedArray, function(err){});
                 gSuccCount += 1;
                 console.log("(" + gSuccCount + "/" + gImgCount + ")" + fileName + " download succ!");
 
@@ -75,12 +106,12 @@ function getHttpReqCallback(imgSrc, dirName) {
 }
 
 function startDownload(imgSrc, dirName) {
-    var urlObj = url.parse(imgSrc);
+    var urlObj = url.parse(imgSrc.src);
     // var fileName = path.basename(imgSrc);
     var options = {
         host: urlObj.host,
         path: urlObj.path,
-        headers: new ReqHeadersTemp()
+        headers: new ReqHeadersTemp(imgSrc.ref)
     };
 
     var req = http.request(options, getHttpReqCallback(imgSrc, dirName));
@@ -137,10 +168,11 @@ router.post('/', function(req, res) {
     var title = nowString + req.body.title;
 
 
-    var dirName = RootDirString + title;
+    var dirName = [RootDirString + title, enCryptedDirString + title];
     res.send(title);
     gSuccCount = 0;
-    fs.mkdir(dirName, function() {
+    fs.mkdirSync(dirName[1]);
+    fs.mkdir(dirName[0], function() {
         console.log(req.body.imgSrcArray);
         console.log(req.body.href);
         var imgSrcArray = req.body.imgSrcArray;
