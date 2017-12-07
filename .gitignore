@@ -1,6 +1,2 @@
-*.xml
-*.log
-*.xpi
-*.iml
-*.pyc
-.name
+nodejs/node_server/.vscode/
+nodejs/node_server/node_modules/
