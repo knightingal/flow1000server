@@ -1,0 +1,34 @@
+html(lang="en", style="height:100%")
+    head
+        link(rel="stylesheet" type="text/css" href="/local1000site/style.css")
+        link(rel="stylesheet" type="text/css" href="/easyui.css")
+        script(type="text/javascript" src="/bower_components/crypto-js/crypto-js.js")
+        script(type="text/javascript").
+            function login_click() {
+                var key = $('#pwd_input').val();
+                document.key = CryptoJS.enc.Utf8.parse(key);
+                $('#pwd_dlg').dialog('close');
+            }
+        script(type="text/javascript" src="/local1000site/index.js")
+        script(type="text/javascript" src="/jquery.min.js")
+        script(type="text/javascript" src="/jquery.easyui.min.js")
+        title local1000
+    body(style="height:100%;overflow:hidden" onload="onLoad()")
+        div(id="pwd_dlg" class="easyui-dialog" title="PASSWORD" style="width:400px;height:200px;padding:10px")
+            div(style="margin-bottom:20px")
+                    input(id="pwd_input" class="easyui-textbox" type="password" style="width:100%;height:40px;padding:12px" data-options="prompt:'Password',iconCls:'icon-lock',iconWidth:38")
+            div
+                a(onclick="login_click()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;")
+                    span(style="font-size:14px;").
+                        Login
+        div(class="easyui-layout" style="width:100%;height:100%;")
+            div(class="left_list" data-options="region:'west',split:true" style="width:512px")
+                ul(class="easyui-datalist" lines="true")
+                    each pic_repertory in pic_repertorys
+                        li
+                            div(class="rep_list" style="width:100%" onmousedown="mDown(this)")
+                                a(aindex=pic_repertory.rep_name, rep_id=pic_repertory.id, apicname=pic_repertory.cover)= pic_repertory.rep_name
+            div(data-options="region:'center'")
+                div(id="img_container" class="imc_container")
+                    img(id="quick_img" class="littleimg")
+                div(id="repertory" style="display:none;" onmouseover="repOver(this)") 

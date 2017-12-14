@@ -10,6 +10,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var postMsg = require('./routes/postMsg');
 var picDirs = require('./routes/picDirs');
+var local1000 = require('./routes/local1000');
 var navy = require('./routes/navy');
 picDirs.dirStat = [];
 var app = express();
@@ -31,6 +32,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/static", express.static(RootDirString));
 
 
 
@@ -84,6 +86,7 @@ init();
 app.use('/', routes);
 app.use('/users', users);
 app.use('/startDownload', postMsg);
+app.use('/local1000', local1000)
 app.use('/navy', navy);
 app.use('/picDirs', picDirs);
 
