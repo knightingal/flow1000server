@@ -105,6 +105,10 @@ var RootDirString = 'D:\\Games\\linux1000\\source\\';
 var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
 
 router.post('/urls1000/', function(req, res) {
+    // let body = '{"title":"title1","imgSrcArray":[
+    //    {"src":"http://127.0.0.1/1.jpg","ref":"http://127.0.0.1/16.html"},
+    //    {"src":"http://127.0.0.1/2.jpg","ref":"http://127.0.0.1/16.html"}
+    // ]}'
     let bodyObj = req.body;
     let stamp = (new Date()).toStamp();
     let title = stamp + bodyObj.title;
