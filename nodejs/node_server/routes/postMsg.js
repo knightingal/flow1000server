@@ -20,20 +20,16 @@ dEmitter.on("next", function(dirName) {
         startDownload(currentImg, dirName);
     }
 });
-// var reqs = {};
-// var bufferArray = {};
 
 var RootDirString = 'D:\\Games\\linux1000\\source\\';
 var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
 
 function ReqHeadersTemp(ref) {
-    // this["Referer"] = pageHref;
     this["User-Agent"]= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
     this["Connection"]= "keep-alive";
     this["Accept"]= "image/webp,image/*,*/*;q=0.8";
     this["Accept-Encoding"]= "gzip,deflate,sdch";
     this["Accept-Language"]= "zh-CN,zh;q=0.8";
-    // this["Accept-Charset"]= "GBK,utf-8;q=0.7,*;q=0.3";
     this["Referer"]=ref
     this["Pragma"]="no-cache"
     this["Cache-Control"]="no-cache"
@@ -165,7 +161,7 @@ router.post('/', function(req, res) {
         (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+
         (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) +
         (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
-    var title = nowString + req.body.title;
+    var title = req.body.title;
 
 
     var dirName = [RootDirString + title, enCryptedDirString + title];
@@ -179,13 +175,8 @@ router.post('/', function(req, res) {
         ImgSrcArray.imgSrcArray = imgSrcArray;
         ImgSrcArray.currentIndex = 0;
         downloadFor20(ImgSrcArray.get20Img(), dirName);
-
-        // var pageHref = req.body[j].href;
-        // for (var i = 0; i < imgSrcArray.length; i++) {
-        //     var imgSrc = imgSrcArray[i];
-        //     startDownload(imgSrc, dirName);
-        // }
     });
 });
+router.downloadFor20 = downloadFor20;
 
 module.exports = router;

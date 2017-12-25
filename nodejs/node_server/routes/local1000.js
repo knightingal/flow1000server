@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const http = require('http');
 const mysql = require('mysql');
+const path = require('path');
+const fs = require('fs');
+const postMsg = require('./postMsg');
+const url = require('url');
 
 const connection = mysql.createConnection({
     host:'127.0.0.1',
@@ -16,6 +20,24 @@ function queryRepertorys(time_stamp) {
         connection.query('select * from local1000site_picrepertory where pub_date > ' + time_stamp, (err, rows, fields) => {
             if (err) throw err;
             res(rows);
+        });
+    });
+}
+
+function insertRepertorys(repertory) {
+    return new Promise((res, rej) => {
+        connection.query('insert into local1000site_picrepertory set ?', repertory, (error, results, fields) => {
+            if (error) throw error;
+            res(results.insertId);
+        });
+    });
+}
+
+function insertPisInstance(picInstance) {
+    return new Promise((res, rej) => {
+        connection.query('insert into local1000site_picinstance set ?', picInstance, (error, results, fields) => {
+            if (error) throw error;
+            res(results.insertId);
         });
     });
 }
@@ -60,6 +82,83 @@ router.get('/picContentAjax', function(req, res) {
     })(reperId).then(reper=> {
         res.send(JSON.stringify(reper));
     });
+});
+
+Date.prototype.numericArray = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"];
+Date.prototype.toStamp = function() {
+    
+    let year = this.getFullYear();
+    let month = this.getMonth() + 1;
+    let day = this.getDate();
+    let hour = this.getHours();
+    let minute = this.getMinutes();
+    let second = this.getSeconds();
+
+    return year.toString() 
+        + (month > 9 ? month.toString() : this.numericArray[month])
+        + (day > 9 ? day.toString(): this.numericArray[day])
+        + (hour > 9 ? hour.toString(): this.numericArray[hour])
+        + (minute > 9 ? minute.toString(): this.numericArray[minute])
+        + (second > 9 ? second.toString(): this.numericArray[second]);
+}
+var RootDirString = 'D:\\Games\\linux1000\\source\\';
+var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
+
+router.post('/urls1000/', function(req, res) {
+    let bodyObj = req.body;
+    let stamp = (new Date()).toStamp();
+    let title = stamp + bodyObj.title;
+    bodyObj.title = title;
+    let picRepertory = {rep_name: title, pub_date: stamp, cover:path.basename(bodyObj.imgSrcArray[0].src)};
+    insertRepertorys(picRepertory)
+    .then(id => {
+        picRepertory.id = id;
+        let picInstances = bodyObj.imgSrcArray.map(img => {
+            return {
+                pic_name:path.basename(img.src),
+                repertory_id:id,
+                is_cover:0
+            };
+        });
+        picInstances[0].is_cover = 1;
+        connection.beginTransaction();
+        return Promise.all(picInstances.map(picInstance => {
+            return insertPisInstance(picInstance);
+        }));
+    })
+    .then(retValues=> {
+        connection.commit();
+        // console.log(retValues);
+        res.send(JSON.stringify(retValues));
+    });
+    // var fileName = path.basename(imgSrc);
+    var options = {
+        host: '127.0.0.1',
+        port: 8000,
+        path: '/startDownload/',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(JSON.stringify(bodyObj))
+          }
+    };
+
+    var req = http.request(options, res => {
+        // console.log(`STATUS: ${res.statusCode}`);
+        // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => {
+            // console.log(`BODY: ${chunk}`);
+        });
+        res.on('end', () => {
+            // console.log('No more data in resp');
+        });
+    });
+    req.on('error', (e) => {
+        console.error(`problem with requst: ${e.message}`);
+    });
+    req.write(JSON.stringify(bodyObj));
+    req.end();
 });
 
 router.get('/repertory', function(req, res) {
