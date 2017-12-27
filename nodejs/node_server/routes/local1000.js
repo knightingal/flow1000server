@@ -185,6 +185,25 @@ router.get('/repertory', function(req, res) {
     });
 });
 
+router.get('/picIndexAjax', function(req, res) {
+    var time_stamp = req.query.time_stamp;
+    if (time_stamp == null || time_stamp == "") {
+        time_stamp = "19700101000000";
+    }
+
+    (async (time_stamp) => {
+        repertorys = await queryRepertorys(time_stamp);
+        return repertorys.map(reper=> {
+            return {
+                index:reper.id,
+                name:reper.rep_name, 
+                mtime:reper.pub_date, 
+            };
+        });
+    })(time_stamp).then(repertorys => {
+        res.send(JSON.stringify(repertorys));
+    });
+});
 
 router.get('/picIndex', function(req, res) {
     var time_stamp = req.query.time_stamp;
