@@ -1,0 +1,17 @@
+#listView {
+    height: 100%;
+    width: 500px;
+}
+
+#left_layout {
+    position: absolute;
+    height: 100%;
+}
+
+#container {
+    margin-left: 500px;
+}
+
+p {
+    margin: 0;
+}

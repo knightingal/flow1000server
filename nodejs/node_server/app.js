@@ -32,6 +32,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/WinJS", express.static(path.join(__dirname, 'node_modules/winjs')));
 app.use("/static", express.static(RootDirString));
 
 

@@ -66,6 +66,12 @@ router.get("/", function (req, res) {
     })
 })
 
+router.get("/winjs1000index", function (req, res) {
+    queryRepertorys("19701010000000").then(pic_repertorys => {
+        res.render('winjs1000index', {pic_repertorys: pic_repertorys});
+    })
+})
+
 router.get('/picContentAjax', function(req, res) {
     var reperId = req.query.id;
     (async (reperId) => {

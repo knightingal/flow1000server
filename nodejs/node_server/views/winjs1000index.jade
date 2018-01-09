@@ -1,0 +1,76 @@
+doctype html
+html
+    head
+        link(rel="stylesheet", tyep="text/css" href="/WinJS/css/ui-light.css")
+
+        link(rel="stylesheet" type="text/css" href="/local1000site/winjsdefault.css")
+
+        script(type="text/javascript" src="/WinJS/js/base.js")
+        script(type="text/javascript" src="/WinJS/js/ui.js")
+        title winjs-local1000
+        script(type="text/javascript").
+            (function () {
+                "use strict";
+
+                var app = WinJS.Application;
+                WinJS.strictProcessing();
+
+                app.onactivated = function (args) {
+                    args.setPromise(WinJS.UI.processAll());
+                };
+
+                app.oncheckpoint = function (args) { };
+
+                app.start();
+
+                var dataSource = !{JSON.stringify(pic_repertorys)};
+
+                var dataList = new WinJS.Binding.List(dataSource);
+                var publicMembers = {
+                    itemList: dataList 
+                };
+                WinJS.Namespace.define("DataExample", publicMembers); 
+            })();
+
+
+
+            function mDown(obj) {
+                console.log(obj);
+
+                //- for (i = 0; i < rep_list.length; i++) {
+                //-     rep_list[i].removeEventListener("mouseover", mOver);
+                //- }
+                //- document.getElementById("img_container").style.display = "none";
+                //- document.getElementById("repertory").style.display = "block";
+                //- document.getElementById("repertory").innerHTML = "";
+                //- var local1000Req = new Request("/local1000/picContentAjax/?id=" + obj.children[0].attributes.rep_id.value)
+                //- fetch(local1000Req)
+                //-     .then(function(resp){
+                //-         return resp.json();
+                //-     })
+                //-     .then(function(resp) {
+                //-         console.log(resp);
+                //-         var repName = resp.dirName;
+                //-         for (var i = 0; i < resp.pics.length; i++) {
+                //-             document.getElementById("repertory").appendChild(document.createElement("img"));
+                //-         }
+                //-         resp.pics.forEach((pic, index) => {
+                //-             var img = document.getElementById("repertory").children[index];
+                //-             img.id="img" + index;
+                //-             fetchEncryptedImg(img, `/static/encrypted/${repName}/${pic}.bin`)
+                //-         });
+                //-     });
+            }
+
+    body
+        div(data-win-control="WinJS.Binding.Template" style="display: none" id="listTemplate")
+            div(data-win-bind="aindex: rep_name; rep_id: id; apicname: cover" class="rep_item" onmousedown="mDown(this)")
+                p(data-win-bind="textContent: rep_name; aindex: rep_name; rep_id: id; apicname: cover")
+        div(id="left_layout")
+            div(id="listView" 
+                data-win-control="WinJS.UI.ListView" 
+                data-win-options="{ itemDataSource : DataExample.itemList.dataSource, itemTemplate: select('#listTemplate'), layout: { type: WinJS.UI.ListLayout } }")
+
+        div(id="container")
+            p.
+                container goes here
