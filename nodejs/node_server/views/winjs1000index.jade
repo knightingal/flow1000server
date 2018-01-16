@@ -2,12 +2,50 @@ doctype html
 html
     head
         link(rel="stylesheet", tyep="text/css" href="/WinJS/css/ui-light.css")
+        style.
+            .customDialog .win-contentdialog-backgroundoverlay {
+                background-color: rgb(113, 38, 110);
+            }
+
+            .customDialog .win-contentdialog-dialog {
+                background-color: rgb(60, 8, 58);
+                outline-color: rgb(166, 88, 163);
+            }
+
+            .customDialog .win-contentdialog-title {
+                color: rgb(245, 245, 245);
+                margin-bottom:18px;
+            }
+
+            .customDialog.win-contentdialog-content{
+                color: rgb(245, 245, 245);
+            }
+
+            .win-contentdialog-primarycommand {
+                background-color: rgb(88, 14, 85);
+                color: rgb(245, 245, 245);
+            }
+
+            .customDialog .win-contentdialog-secondarycommand {
+                color: rgb(245, 245, 245);
+            }
+
+            .win-contentdialog-content {
+                color: white;
+            }
+            #pwdEdit {
+                padding-left:0;
+                padding-right:0;
+                width:calc(100% - 4px);
+            }
 
         link(rel="stylesheet" type="text/css" href="/local1000site/winjsdefault.css")
 
         script(type="text/javascript" src="/WinJS/js/base.js")
         script(type="text/javascript" src="/WinJS/js/ui.js")
+        script(type="text/javascript" src="/bower_components/crypto-js/crypto-js.js")
         title winjs-local1000
+        script(type="text/javascript" src="/winjs1000/default.js")
         script(type="text/javascript").
             (function () {
                 "use strict";
@@ -16,7 +54,16 @@ html
                 WinJS.strictProcessing();
 
                 app.onactivated = function (args) {
-                    args.setPromise(WinJS.UI.processAll());
+                    args.setPromise(WinJS.UI.processAll().done(function() {
+                        document.querySelector(".win-contentdialog").style.visibility="visible";
+                        var contentDialog = document.querySelector(".win-contentdialog").winControl;
+
+                        contentDialog.show();
+                        contentDialog.addEventListener("beforehide", function() {
+                            var password = document.getElementById("pwdEdit").value
+                            document.key = CryptoJS.enc.Utf8.parse(password);
+                        });
+                    }));
                 };
 
                 app.oncheckpoint = function (args) { };
@@ -32,45 +79,18 @@ html
                 WinJS.Namespace.define("DataExample", publicMembers); 
             })();
 
-
-
-            function mDown(obj) {
-                console.log(obj);
-
-                //- for (i = 0; i < rep_list.length; i++) {
-                //-     rep_list[i].removeEventListener("mouseover", mOver);
-                //- }
-                //- document.getElementById("img_container").style.display = "none";
-                //- document.getElementById("repertory").style.display = "block";
-                //- document.getElementById("repertory").innerHTML = "";
-                //- var local1000Req = new Request("/local1000/picContentAjax/?id=" + obj.children[0].attributes.rep_id.value)
-                //- fetch(local1000Req)
-                //-     .then(function(resp){
-                //-         return resp.json();
-                //-     })
-                //-     .then(function(resp) {
-                //-         console.log(resp);
-                //-         var repName = resp.dirName;
-                //-         for (var i = 0; i < resp.pics.length; i++) {
-                //-             document.getElementById("repertory").appendChild(document.createElement("img"));
-                //-         }
-                //-         resp.pics.forEach((pic, index) => {
-                //-             var img = document.getElementById("repertory").children[index];
-                //-             img.id="img" + index;
-                //-             fetchEncryptedImg(img, `/static/encrypted/${repName}/${pic}.bin`)
-                //-         });
-                //-     });
-            }
-
     body
+
         div(data-win-control="WinJS.Binding.Template" style="display: none" id="listTemplate")
-            div(data-win-bind="aindex: rep_name; rep_id: id; apicname: cover" class="rep_item" onmousedown="mDown(this)")
+            div(data-win-bind="aindex: rep_name; rep_id: id; apicname: cover" class="rep_item" onmouseover="mOver(this)" onmousedown="mDown(this)")
                 p(data-win-bind="textContent: rep_name; aindex: rep_name; rep_id: id; apicname: cover")
         div(id="left_layout")
             div(id="listView" 
                 data-win-control="WinJS.UI.ListView" 
                 data-win-options="{ itemDataSource : DataExample.itemList.dataSource, itemTemplate: select('#listTemplate'), layout: { type: WinJS.UI.ListLayout } }")
-
-        div(id="container")
-            p.
-                container goes here
+        div(id="container" style="overflow:auto; height:100%")
+            div(id="img_container" class="imc_container")
+                img(id="quick_img" class="littleimg")
+            div(id="repertory" style="display:none;" onmouseover="" ) 
+        div(class="customDialog" data-win-control="WinJS.UI.ContentDialog" data-win-options="{ title: 'Main instruction', primaryCommandText: 'OK', secondaryCommandText: 'Cancle' }" style="visibility:hidden")
+            input#pwdEdit(type="password")
