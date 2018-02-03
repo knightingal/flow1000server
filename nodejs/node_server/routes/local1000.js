@@ -24,6 +24,33 @@ function queryRepertorys(time_stamp) {
     });
 }
 
+function queryTarsyliaBook() {
+    return new Promise((resolve, reject) => {
+        connection.query('select * from tarsylia_book', (err, rows, fields) => {
+            if (err) throw err;
+            resolve(rows);
+        });
+    });
+}
+
+function queryTarsyliaSection(book_id) {
+    return new Promise((resolve, reject) => {
+        connection.query('select * from tarsylia_section where book_id = ' + book_id, (err, rows, fields) => {
+            if (err) throw err;
+            resolve(rows);
+        });
+    });
+}
+
+function queryTarsyliaImg(section_id) {
+    return new Promise((resolve, reject) => {
+        connection.query('select * from tarsylia_img where section_id = ' + section_id, (err, rows, fields) => {
+            if (err) throw err;
+            resolve(rows);
+        });
+    });
+}
+
 function insertRepertorys(repertory) {
     return new Promise((res, rej) => {
         connection.query('insert into local1000site_picrepertory set ?', repertory, (error, results, fields) => {
@@ -208,6 +235,23 @@ router.get('/picIndexAjax', function(req, res) {
         });
     })(time_stamp).then(repertorys => {
         res.send(JSON.stringify(repertorys));
+    });
+});
+router.get('/tarsylia', function(req, res) {
+    
+    (async () => {
+        books = await queryTarsyliaBook();
+        for (let book of books) {
+            let sectionDetails = await queryTarsyliaSection(book.id);
+            book.section = sectionDetails;
+            for (let section of sectionDetails) {
+                let imgDetails = await queryTarsyliaImg(section.id);
+                section.img = imgDetails;
+            }
+        }
+        return books;
+    })().then(books => {
+        res.send(JSON.stringify(books));
     });
 });
 

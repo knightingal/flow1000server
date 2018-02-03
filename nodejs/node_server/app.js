@@ -21,6 +21,8 @@ if (os.platform() === "win32") {
     var RootDirString = '/home/knightingal/download/';
 }
 
+var TarsyliaPath = "D:\\cartoon\\tarsylia\\"
+
 picDirs.RootDirString = RootDirString;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,6 +36,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/WinJS", express.static(path.join(__dirname, 'node_modules/winjs')));
 app.use("/static", express.static(RootDirString));
+app.use("/tarsyliaImg", express.static(TarsyliaPath));
 
 
 
