@@ -10,8 +10,9 @@ const iv = CryptoJS.enc.Utf8.parse("2017041621251234");
 
 function mOver(event) {
     //- console.log(event);
-    document.getElementById("repertory").style.display = "none";
-    document.getElementById("img_container").style.display = "block";
+    // document.getElementById("repertory").style.display = "none";
+    document.getElementById("quick_img").style.transform = "translateX(0)";
+    document.getElementById("quick_img").style.transform += "scaleX(1)";
     //- document.getElementById("repertory").style.display = "none";
     var index = event.aindex;
     var picname = event.apicname;
@@ -52,12 +53,17 @@ const fetchEncryptedImg = (imgNode, url) => {
     });
 }
 
+function hideQuickImg(event) {
+    document.getElementById("quick_img").style.transform = "translateX(-50%)";
+    document.getElementById("quick_img").style.transform += "scaleX(0)";
+}
+
 function mDown(event) {
 
     // for (i = 0; i < rep_list.length; i++) {
     //     rep_list[i].removeEventListener("mouseover", mOver);
     // }
-    document.getElementById("img_container").style.display = "none";
+    // document.getElementById("img_container").style.display = "none";
     document.getElementById("repertory").style.display = "block";
     document.getElementById("repertory").innerHTML = "";
     var local1000Req = new Request("/local1000/picContentAjax/?id=" + event.rep_id)

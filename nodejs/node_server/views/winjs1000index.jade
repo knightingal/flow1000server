@@ -51,9 +51,9 @@ html
             div(id="listView" 
                 data-win-control="WinJS.UI.ListView" 
                 data-win-options="{ itemDataSource : DataExample.itemList.dataSource, itemTemplate: select('#listTemplate'), layout: { type: WinJS.UI.ListLayout } }")
-        div(id="container" style="overflow:auto; height:100%")
-            div(id="img_container" class="imc_container")
-                img(id="quick_img" class="littleimg")
-            div(id="repertory" style="display:none;" onmouseover="" ) 
+        div(id="img_container" class="imc_container" onmouseover="hideQuickImg(this)" style="height:100%")
+            img(id="quick_img" class="littleimg" )
+        div(id="container" style="overflow:auto; height:100%" onmouseover="hideQuickImg(this)")
+            div(id="repertory"  ) 
         div(class="customDialog" data-win-control="WinJS.UI.ContentDialog" data-win-options="{ title: 'Main instruction', primaryCommandText: 'OK', secondaryCommandText: 'Cancle' }" style="visibility:hidden")
             input#pwdEdit(type="password")

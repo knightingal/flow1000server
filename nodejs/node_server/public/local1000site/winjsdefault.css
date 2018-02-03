@@ -11,6 +11,19 @@
 #container {
     margin-left: 500px;
 }
+.imc_container {
+    position:absolute;
+    left:500px;
+}
+
+.littleimg {
+    height:60%;
+    top:20%;
+    position:absolute;
+    transition: transform 0.6s;
+    border-width: 5px;border-color: gray;border-style: solid;
+    transform: translateX(-50%) scale(0)
+}
 
 p {
     margin: 0;
