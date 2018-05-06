@@ -6,6 +6,7 @@ var fs = require("fs");
 var url = require('url');
 var path = require('path');
 var EventEmitter = require('events');
+var config = require('../config');
 
 function DEventEmitter() {
     EventEmitter.call(this);
@@ -38,7 +39,7 @@ function ReqHeadersTemp(ref) {
 
 var gImgCount = 0;
 var gSuccCount = 0;
-const key = CryptoJS.enc.Utf8.parse(""); //16位
+const key = CryptoJS.enc.Utf8.parse(config.password);
 const iv = CryptoJS.enc.Utf8.parse("2017041621251234");
 
 const encyptoArray = (array) => {
@@ -152,18 +153,8 @@ var ImgSrcArray = {
 //TODO: so many anonymous function, and callback hell!!!
 router.post('/', function(req, res) {
     console.log(req.body);
-
     gImgCount += req.body.imgSrcArray.length;
-    var nowTime = new Date(Date.now());
-    var nowString = "" + nowTime.getFullYear() +
-        ((nowTime.getMonth() + 1) < 10 ? "0" + (nowTime.getMonth() + 1) : (nowTime.getMonth() + 1)) +
-        (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate()) +
-        (nowTime.getHours() < 10 ? "0" + nowTime.getHours() : nowTime.getHours())+
-        (nowTime.getMinutes() < 10 ? "0" + nowTime.getMinutes() : nowTime.getMinutes()) +
-        (nowTime.getSeconds() < 10 ? "0" + nowTime.getSeconds() : nowTime.getSeconds());
     var title = req.body.title;
-
-
     var dirName = [RootDirString + title, enCryptedDirString + title];
     res.send(title);
     gSuccCount = 0;
