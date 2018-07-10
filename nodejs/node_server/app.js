@@ -18,7 +18,7 @@ var fs = require('fs');
 if (os.platform() === "win32") {
     var RootDirString = 'D:\\Games\\linux1000\\';
 } else {
-    var RootDirString = '/home/knightingal/download/';
+    var RootDirString = '/home/knightingal/download/linux1000/';
 }
 
 var TarsyliaPath = "D:\\cartoon\\tarsylia\\"

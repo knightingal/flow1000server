@@ -45,8 +45,8 @@ html
     body
 
         div(data-win-control="WinJS.Binding.Template" style="display: none" id="listTemplate")
-            div(data-win-bind="aindex: rep_name; rep_id: id; apicname: cover" class="rep_item" onmouseover="mOver(this)" onmousedown="mDown(this)")
-                p(data-win-bind="textContent: rep_name; aindex: rep_name; rep_id: id; apicname: cover")
+            div(data-win-bind="aindex: dir_name; rep_id: id; apicname: cover" class="rep_item" onmouseover="mOver(this)" onmousedown="mDown(this)")
+                p(data-win-bind="textContent: dir_name; aindex: dir_name; rep_id: id; apicname: cover")
         div(id="left_layout")
             div(id="listView" 
                 data-win-control="WinJS.UI.ListView" 

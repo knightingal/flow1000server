@@ -22,8 +22,8 @@ dEmitter.on("next", function(dirName) {
     }
 });
 
-var RootDirString = 'D:\\Games\\linux1000\\source\\';
-var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
+var RootDirString = '/home/knightingal/download/linux1000/source/';
+var enCryptedDirString = '/home/knightingal/download/linux1000/encrypted/' 
 
 function ReqHeadersTemp(ref) {
     this["User-Agent"]= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";

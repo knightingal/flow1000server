@@ -9,15 +9,15 @@ const url = require('url');
 
 const connection = mysql.createConnection({
     host:'127.0.0.1',
-    user:'Knightingal',
-    password:'123456',
-    database:'djangodb'
+    user:'knightingal',
+    password:'******',
+    database:'flow1000db'
 });
 connection.connect();
 
 function queryRepertorys(time_stamp) {
     return new Promise((res, rej) => {
-        connection.query('select * from local1000site_picrepertory where pub_date > ' + time_stamp, (err, rows, fields) => {
+        connection.query('select * from flow1000section where create_time > ' + time_stamp, (err, rows, fields) => {
             if (err) throw err;
             res(rows);
         });
@@ -53,7 +53,7 @@ function queryTarsyliaImg(section_id) {
 
 function insertRepertorys(repertory) {
     return new Promise((res, rej) => {
-        connection.query('insert into local1000site_picrepertory set ?', repertory, (error, results, fields) => {
+        connection.query('insert into flow1000section set ?', repertory, (error, results, fields) => {
             if (error) throw error;
             res(results.insertId);
         });
@@ -62,7 +62,7 @@ function insertRepertorys(repertory) {
 
 function insertPisInstance(picInstance) {
     return new Promise((res, rej) => {
-        connection.query('insert into local1000site_picinstance set ?', picInstance, (error, results, fields) => {
+        connection.query('insert into flow1000img set ?', picInstance, (error, results, fields) => {
             if (error) throw error;
             res(results.insertId);
         });
@@ -71,7 +71,7 @@ function insertPisInstance(picInstance) {
 
 function queryRepertorysById(reperId) {
     return new Promise((res, rej) => {
-        connection.query('select * from local1000site_picrepertory where id = ' + reperId, (err, rows, fields) => {
+        connection.query('select * from flow1000section where id = ' + reperId, (err, rows, fields) => {
             if (err) throw err;
             res(rows);
         });
@@ -80,7 +80,7 @@ function queryRepertorysById(reperId) {
 
 function queryPicsByReperId(reperId) {
     return new Promise((res, rej) => {
-        connection.query('select * from local1000site_picinstance where repertory_id = ' + reperId, (err, rows, fields) => {
+        connection.query('select * from flow1000img where section_id = ' + reperId, (err, rows, fields) => {
             if (err) throw err;
             res(rows);
         });
@@ -105,11 +105,11 @@ router.get('/picContentAjax', function(req, res) {
         let repers = await queryRepertorysById(reperId);
         console.log(repers)
         let reper = {
-            dirName:repers[0].rep_name,
+            dirName:repers[0].dir_name,
             picpage:reperId,
         }
         reper.pics = (await queryPicsByReperId(reperId)).map(pic => {
-            return pic.pic_name;
+            return pic.name;
         });
         return reper;
     })(reperId).then(reper=> {
@@ -146,18 +146,23 @@ router.post('/urls1000/', function(req, res) {
     let stamp = (new Date()).toStamp();
     let title = stamp + bodyObj.title;
     bodyObj.title = title;
-    let picRepertory = {rep_name: title, pub_date: stamp, cover:path.basename(bodyObj.imgSrcArray[0].src)};
+    let picRepertory = {
+        name: title.substring(14),
+        dir_name:title, 
+        create_time: stamp, 
+        cover:path.basename(bodyObj.imgSrcArray[0].src)
+    };
     insertRepertorys(picRepertory)
     .then(id => {
         picRepertory.id = id;
         let picInstances = bodyObj.imgSrcArray.map(img => {
             return {
-                pic_name:path.basename(img.src),
-                repertory_id:id,
-                is_cover:0
+                name:path.basename(img.src),
+                section_id:id,
+                in_cover:0
             };
         });
-        picInstances[0].is_cover = 1;
+        picInstances[0].in_cover = 1;
         connection.beginTransaction();
         return Promise.all(picInstances.map(picInstance => {
             return insertPisInstance(picInstance);
@@ -177,7 +182,7 @@ router.post('/urls1000/', function(req, res) {
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(JSON.stringify(bodyObj))
-          }
+        }
     };
 
     var req = http.request(options, res => {
@@ -204,12 +209,12 @@ router.get('/repertory', function(req, res) {
         let repers = await queryRepertorysById(reperId);
         console.log(repers)
         let reper = {
-            dirName:repers[0].rep_name,
+            dirName:repers[0].dir_name,
             picpage:reperId,
         }
         reper.pics = (await queryPicsByReperId(reperId)).map(pic => {
             return {
-                name:pic.pic_name
+                name:pic.name
             };
         });
         return reper;
@@ -229,8 +234,8 @@ router.get('/picIndexAjax', function(req, res) {
         return repertorys.map(reper=> {
             return {
                 index:reper.id,
-                name:reper.rep_name, 
-                mtime:reper.pub_date, 
+                name:reper.dir_name, 
+                mtime:reper.create_time, 
             };
         });
     })(time_stamp).then(repertorys => {
@@ -266,8 +271,8 @@ router.get('/picIndex', function(req, res) {
         return repertorys.map(reper=> {
             return {
                 index:reper.id,
-                name:reper.rep_name, 
-                mtime:reper.pub_date, 
+                name:reper.name, 
+                mtime:reper.create_time, 
             };
         });
     })(time_stamp).then(repertorys => {
