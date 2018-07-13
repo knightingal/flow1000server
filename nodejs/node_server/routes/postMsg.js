@@ -34,7 +34,6 @@ function ReqHeadersTemp(ref) {
     this["Referer"]=ref
     this["Pragma"]="no-cache"
     this["Cache-Control"]="no-cache"
-    this["Host"]="531.1000yishu.com"
 }
 
 var gImgCount = 0;
