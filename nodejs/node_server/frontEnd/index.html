@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Flow1000</title>
+        <style>
+            .Container {
+                display: flex;
+                height: 100%;
+            }
+
+            .Content {
+                flex: 1;
+                height: 100%;
+                overflow-y: scroll;
+            }
+
+            .SectionList {
+                height: 100%;
+                flex: 0 0 450px;
+                order: -1;
+                overflow-y: scroll;
+            }
+        </style>
+    </head>
+    <body style="height: 100%; margin: 0;">
+        <div id="root" style="height: 100%;"></div>
+
+        <!-- Dependencies -->
+        <script src="/lib/react/umd/react.development.js"></script>
+        <script src="/lib/react-dom/umd/react-dom.development.js"></script>
+
+        <!-- Main -->
+        <script src="/dist/bundle.js"></script>
+    </body>
+</html>
