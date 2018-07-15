@@ -1,12 +1,13 @@
 import * as React from 'react';
+import {Container} from './Container';
 class SectionBean {
     index:string;
     name:string;
     mtime:string;
 }
 
-export class SectionList extends React.Component<{}, {sectionList:Array<SectionBean>}> {
-    constructor(props:{}) {
+export class SectionList extends React.Component<{container: Container}, {sectionList:Array<SectionBean>}> {
+    constructor(props:{container: Container}) {
         super(props);
         this.state = {sectionList:[]};
     }
@@ -24,6 +25,10 @@ export class SectionList extends React.Component<{}, {sectionList:Array<SectionB
         });
     }
 
+    handleSectionClick(e: React.MouseEvent, index: string) {
+        this.props.container.notifySectionClick(index);
+    }
+
     componentDidMount() {
         this.fecthSectionList();        
     }
@@ -31,7 +36,7 @@ export class SectionList extends React.Component<{}, {sectionList:Array<SectionB
     render() {
         return <div className="SectionList">
             {this.state.sectionList.map((sectionBean: SectionBean, index: number) => {
-                return <p key={index}>{sectionBean.name}</p>;
+                return <p key={index} onClick={(e) => this.handleSectionClick(e, sectionBean.index)}>{sectionBean.name}</p>;
             })}
         </div>
     }

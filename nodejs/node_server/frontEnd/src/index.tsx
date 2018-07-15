@@ -1,12 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {SectionList} from './components/SectionList';
-import {Content} from './components/Content';
+import {Container} from './components/Container';
 
 ReactDOM.render(
-    <div className="Container">
-    <Content />
-    <SectionList />
-    </div>,
+    <Container />,
     document.getElementById('root')
 )
