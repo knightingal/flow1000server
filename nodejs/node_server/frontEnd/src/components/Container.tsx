@@ -8,11 +8,7 @@ export class Container extends React.Component<{}, {index: string}> {
         this.setState({
             index: index
         });
-
-        this.content.fecthSectionList(index);
     }
-
-    content:Content = null;
 
     constructor(props: {}) {
         super(props);
@@ -21,7 +17,7 @@ export class Container extends React.Component<{}, {index: string}> {
 
     render() {
         return <div className="Container">
-            <Content container={this}/>
+            <Content index={this.state.index}/>
             <SectionList container={this}/>
         </div>
     }

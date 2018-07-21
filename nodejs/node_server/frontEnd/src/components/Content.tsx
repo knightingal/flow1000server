@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Container} from './Container';
+import {ImgComponent} from './ImgComponent';
 class SectionDetail {
     dirName:string;
     picPage:string;
@@ -12,10 +13,9 @@ class SectionDetail {
     }
 }
 
-export class Content extends React.Component<{container: Container}, {sectionDetail:SectionDetail}> {
-    constructor(props:{container: Container}) {
+export class Content extends React.Component<{index:string}, {sectionDetail:SectionDetail}> {
+    constructor(props:{index: string}) {
         super(props);
-        props.container.content = this;
         this.state = {sectionDetail: new SectionDetail()};
     }
 
@@ -33,13 +33,21 @@ export class Content extends React.Component<{container: Container}, {sectionDet
     }
 
     componentDidMount() {
-        this.fecthSectionList(this.props.container.state.index);        
+        this.fecthSectionList(this.props.index);        
+    }
+
+    componentDidUpdate(prevProps: {index:string}) {
+        if (this.props.index !== prevProps.index) {
+            this.fecthSectionList(this.props.index);        
+        }
+
     }
 
     render() {
         return <div className="Content">
             {this.state.sectionDetail.pics.map((pic: string, index: number) => {
-                return <p key={index}>{pic}</p>;
+                return <ImgComponent  key={index} src={`/static/source/${this.state.sectionDetail.dirName}/${pic}`} />
+                // return <img key={index} src={`/static/source/${this.state.sectionDetail.dirName}/${pic}`} />
             })}
         </div>
     }
