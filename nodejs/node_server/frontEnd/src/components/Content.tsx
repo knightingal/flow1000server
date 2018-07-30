@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Container} from './Container';
 import {ImgComponent} from './ImgComponent';
 class SectionDetail {
     dirName:string;
@@ -46,8 +45,7 @@ export class Content extends React.Component<{index:string}, {sectionDetail:Sect
     render() {
         return <div className="Content">
             {this.state.sectionDetail.pics.map((pic: string, index: number) => {
-                return <ImgComponent  key={index} src={`/static/source/${this.state.sectionDetail.dirName}/${pic}`} />
-                // return <img key={index} src={`/static/source/${this.state.sectionDetail.dirName}/${pic}`} />
+                return <ImgComponent  key={index} src={`/static/encrypted/${this.state.sectionDetail.dirName}/${pic}.bin`} />
             })}
         </div>
     }

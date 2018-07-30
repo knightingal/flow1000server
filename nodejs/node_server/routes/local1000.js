@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const postMsg = require('./postMsg');
 const url = require('url');
+const images = require('images');
 
 const connection = mysql.createConnection({
     host:'127.0.0.1',
@@ -14,6 +15,15 @@ const connection = mysql.createConnection({
     database:'flow1000db'
 });
 connection.connect();
+
+function updateSize(picId, width, height) {
+    return new Promise((res, rej) => {
+        connection.query('update flow1000img set width=?, height=? where id=?', [width, height, picId], (error, results, fields) => {
+            if (error) throw error;
+            res(results.insertId);
+        });
+    });
+}
 
 function queryRepertorys(time_stamp) {
     return new Promise((res, rej) => {
@@ -136,6 +146,27 @@ Date.prototype.toStamp = function() {
 }
 var RootDirString = 'D:\\Games\\linux1000\\source\\';
 var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
+router.post('/allComplete/', (req, res) => {
+    const bodyObj = req.body;
+    res.send("");
+    console.log(`allComplete: ${JSON.stringify(bodyObj)}`);
+
+    // const pics = queryPicsByReperId(bodyObj.sectionId);
+    queryPicsByReperId(bodyObj.sectionId)
+    .then(pics => {
+        connection.beginTransaction();
+        return Promise.all(pics.map(pic => {
+            const path = `${bodyObj.dirName}/${pic.name}`;
+            const img = images(path);
+            console.log(`${path}: width:${img.width()}, height:${img.height()}`);
+            return updateSize(pic.id, img.width(), img.height());
+        }));
+    })
+    .then((retValues) => {
+        connection.commit();
+    })
+
+});
 
 router.post('/urls1000/', function(req, res) {
     // let body = '{"title":"title1","imgSrcArray":[
@@ -155,6 +186,7 @@ router.post('/urls1000/', function(req, res) {
     insertRepertorys(picRepertory)
     .then(id => {
         picRepertory.id = id;
+        bodyObj.sectionId = id;
         let picInstances = bodyObj.imgSrcArray.map(img => {
             return {
                 name:path.basename(img.src),
@@ -172,35 +204,36 @@ router.post('/urls1000/', function(req, res) {
         connection.commit();
         // console.log(retValues);
         res.send(JSON.stringify(retValues));
+
+        var options = {
+            host: '127.0.0.1',
+            port: 8000,
+            path: '/startDownload/',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(JSON.stringify(bodyObj))
+            }
+        };
+
+        var req = http.request(options, res => {
+            // console.log(`STATUS: ${res.statusCode}`);
+            // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+            res.setEncoding('utf8');
+            res.on('data', (chunk) => {
+                // console.log(`BODY: ${chunk}`);
+            });
+            res.on('end', () => {
+                // console.log('No more data in resp');
+            });
+        });
+        req.on('error', (e) => {
+            console.error(`problem with requst: ${e.message}`);
+        });
+        req.write(JSON.stringify(bodyObj));
+        req.end();
     });
     // var fileName = path.basename(imgSrc);
-    var options = {
-        host: '127.0.0.1',
-        port: 8000,
-        path: '/startDownload/',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(JSON.stringify(bodyObj))
-        }
-    };
-
-    var req = http.request(options, res => {
-        // console.log(`STATUS: ${res.statusCode}`);
-        // console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-        res.setEncoding('utf8');
-        res.on('data', (chunk) => {
-            // console.log(`BODY: ${chunk}`);
-        });
-        res.on('end', () => {
-            // console.log('No more data in resp');
-        });
-    });
-    req.on('error', (e) => {
-        console.error(`problem with requst: ${e.message}`);
-    });
-    req.write(JSON.stringify(bodyObj));
-    req.end();
 });
 
 router.get('/repertory', function(req, res) {

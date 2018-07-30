@@ -1,5 +1,6 @@
 const fs = require('fs');
 const mysql = require('mysql');
+const images = require('images');
 
 const connection = mysql.createConnection({
     host:'127.0.0.1',
@@ -53,8 +54,11 @@ let sectionDirs = fs.readdirSync('/home/knightingal/download/linux1000/source/')
 
 sectionDirs.forEach((sectionDirName) => {
 
-    const imgs = fs.readdirSync('/home/knightingal/download/linux1000/source/' + sectionDirName).filter((fileName) => {
+    var imgs = fs.readdirSync('/home/knightingal/download/linux1000/source/' + sectionDirName).filter((fileName) => {
         return fileName.match(/\S+\.[jJ][pP][gG]$/) != null;
+    });
+    imgs = imgs.sort((a, b) => {
+        return Number.parseInt(a) - Number.parseInt(b);
     });
     const section = {
         dir_name: sectionDirName,
@@ -65,10 +69,14 @@ sectionDirs.forEach((sectionDirName) => {
     insertRepertorys(section)
     .then(id => {
         const imgInstances = imgs.map((imgName, index) => {
+            // const img = images('/home/knightingal/download/linux1000/source/' + sectionDirName + '/' + imgName)
+
             return {
                 name: imgName,
                 section_id: id,
                 in_cover: index === 0 ? 1 : 0
+                // withd: img.width(),
+                // height: img.height()
             };
         });
 
