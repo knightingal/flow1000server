@@ -109,6 +109,28 @@ router.get("/winjs1000index", function (req, res) {
     })
 })
 
+router.get('/picDetailAjax', function(req, res) {
+    var reperId = req.query.id;
+    (async (reperId) => {
+        let repers = await queryRepertorysById(reperId);
+        console.log(repers)
+        let reper = {
+            dirName:repers[0].dir_name,
+            picpage:reperId,
+        }
+        reper.pics = (await queryPicsByReperId(reperId)).map(pic => {
+            return {
+                "name":pic.name, 
+                "width":pic.width, 
+                "height":pic.height
+            };
+        });
+        return reper;
+    })(reperId).then(reper=> {
+        res.send(JSON.stringify(reper));
+    });
+});
+
 router.get('/picContentAjax', function(req, res) {
     var reperId = req.query.id;
     (async (reperId) => {

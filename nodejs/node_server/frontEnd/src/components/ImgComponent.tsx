@@ -2,8 +2,8 @@ import * as React from 'react';
 import {decryptArray} from '../lib/decryptoArray';
 
 
-export class ImgComponent extends React.Component<{src: string}, {url: string}> {
-    constructor(props:{src: string}) {
+export class ImgComponent extends React.Component<{src: string, height: number, width: number}, {url: string}> {
+    constructor(props:{src: string, height: number, width: number}) {
         super(props);
         this.state = {
             url:null
@@ -23,17 +23,25 @@ export class ImgComponent extends React.Component<{src: string}, {url: string}> 
     }
 
     componentDidMount() {
-        this.fetchImgByUrl(this.props.src);
+        if (this.props.src != null) {
+            this.fetchImgByUrl(this.props.src);
+        }
+
     }
 
     componentDidUpdate(prevProps: {src: string}) {
-        if (this.props.src !== prevProps.src) {
+        if (this.props.src !== prevProps.src && this.props.src != null) {
             this.fetchImgByUrl(this.props.src);
         }
 
     }
 
     render() {
-        return <img src={this.state.url}/>
+        return <img 
+            src={this.state.url} 
+            style={{display:"block"}}
+            height={`${this.props.height}px`} 
+            width={`${this.props.width}px`}
+        />
     }
 }
