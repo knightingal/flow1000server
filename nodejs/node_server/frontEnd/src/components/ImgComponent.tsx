@@ -25,15 +25,24 @@ export class ImgComponent extends React.Component<{src: string, height: number, 
     componentDidMount() {
         if (this.props.src != null) {
             this.fetchImgByUrl(this.props.src);
+        } else {
+            this.setState({
+                url: null
+            });
         }
 
     }
 
     componentDidUpdate(prevProps: {src: string}) {
-        if (this.props.src !== prevProps.src && this.props.src != null) {
-            this.fetchImgByUrl(this.props.src);
+        if (this.props.src !== prevProps.src) {
+            if(this.props.src != null) {
+                this.fetchImgByUrl(this.props.src);
+            } else {
+                this.setState({
+                    url: null
+                });
+            }
         }
-
     }
 
     render() {
