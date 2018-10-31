@@ -36,7 +36,9 @@ export class SectionList extends React.Component<{container: Container}, {sectio
     render() {
         return <div className="SectionList">
             {this.state.sectionList.map((sectionBean: SectionBean, index: number) => {
-                return <div key={index} onClick={(e) => this.handleSectionClick(e, sectionBean.index)}>{sectionBean.name}</div>;
+                return (<div key={index} onClick={(e) => this.handleSectionClick(e, sectionBean.index)}>
+                    <a className="SectionListItem">{sectionBean.name}</a>
+                </div>);
             })}
         </div>
     }
