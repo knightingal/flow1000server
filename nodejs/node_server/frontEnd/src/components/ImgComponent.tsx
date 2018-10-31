@@ -25,7 +25,6 @@ export class ImgComponent extends React.Component<{src: string, height: number, 
     componentDidMount() {
         if (this.props.src != null) {
             this.fetchImgByUrl(this.props.src);
-        } else {
             this.setState({
                 url: null
             });
@@ -37,7 +36,6 @@ export class ImgComponent extends React.Component<{src: string, height: number, 
         if (this.props.src !== prevProps.src) {
             if(this.props.src != null) {
                 this.fetchImgByUrl(this.props.src);
-            } else {
                 this.setState({
                     url: null
                 });
