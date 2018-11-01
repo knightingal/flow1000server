@@ -7,13 +7,22 @@ class SectionBean {
 }
 
 export class SectionList extends React.Component<{container: Container}, {sectionList:Array<SectionBean>}> {
+    url:URL;
     constructor(props:{container: Container}) {
         super(props);
         this.state = {sectionList:[]};
+        this.url = new URL(document.URL);
     }
 
     fecthSectionList() {
-        fetch("/local1000/picIndexAjax")
+        let fetchUrl:string;
+        if (this.url.pathname.indexOf("battleships.html") >= 0) {
+            fetchUrl = "/local1000/picIndexAjax?param=battleship";
+        } else {
+            fetchUrl = "/local1000/picIndexAjax";
+        }
+        console.log("fetchUrl is " + fetchUrl);
+        fetch(fetchUrl)
         .then((resp: Response) => {
             return resp.json();
         })
