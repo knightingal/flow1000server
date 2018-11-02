@@ -17,7 +17,7 @@ export class SectionList extends React.Component<{container: Container}, {sectio
     fecthSectionList() {
         let fetchUrl:string;
         if (this.url.pathname.indexOf("battleships.html") >= 0) {
-            fetchUrl = "/local1000/picIndexAjax?param=battleship";
+            fetchUrl = "/local1000/picIndexAjax?album=BattleShips";
         } else {
             fetchUrl = "/local1000/picIndexAjax";
         }

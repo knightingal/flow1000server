@@ -25,9 +25,9 @@ function updateSize(picId, width, height) {
     });
 }
 
-function queryRepertorys(time_stamp) {
+function queryRepertorys(time_stamp, album) {
     return new Promise((res, rej) => {
-        connection.query('select * from flow1000section where create_time > ' + time_stamp, (err, rows, fields) => {
+        connection.query('select * from flow1000section where create_time > ' + time_stamp + ' and album = \'' + album + '\'', (err, rows, fields) => {
             if (err) throw err;
             res(rows);
         });
@@ -283,9 +283,13 @@ router.get('/picIndexAjax', function(req, res) {
     if (time_stamp == null || time_stamp == "") {
         time_stamp = "19700101000000";
     }
+    var album = req.query.album;
+    if (album == null || album == "") {
+        album = "flow1000";
+    }
 
-    (async (time_stamp) => {
-        repertorys = await queryRepertorys(time_stamp);
+    (async (time_stamp, album) => {
+        repertorys = await queryRepertorys(time_stamp, album);
         return repertorys.map(reper=> {
             return {
                 index:reper.id,
@@ -293,7 +297,7 @@ router.get('/picIndexAjax', function(req, res) {
                 mtime:reper.create_time, 
             };
         });
-    })(time_stamp).then(repertorys => {
+    })(time_stamp, album).then(repertorys => {
         res.send(JSON.stringify(repertorys));
     });
 });
