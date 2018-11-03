@@ -40,6 +40,9 @@ export class Content extends React.Component<{index:string}, {sectionDetail:Sect
     }
 
     fecthSectionList(index: string) {
+        if (index === "0") {
+            return;
+        }
         fetch(`/local1000/picDetailAjax?id=${index}`)
         .then((resp: Response) => {
             return resp.json();

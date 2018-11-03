@@ -12,7 +12,7 @@ export class Container extends React.Component<{}, {index: string}> {
 
     constructor(props: {}) {
         super(props);
-        this.state = {index: "1"};
+        this.state = {index: "0"};
     }
 
     render() {
