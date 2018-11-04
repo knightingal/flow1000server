@@ -22,6 +22,10 @@ export class Container extends React.Component<{}, {popup: boolean ,index: strin
         });
     }
 
+    updatePassword(password: string) {
+        // TODO: notify password to decrypto function
+    }
+
     render() {
         if (this.state.popup == true) {
             return <Popup container={this}/>
