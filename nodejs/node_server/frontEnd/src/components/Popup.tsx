@@ -12,10 +12,18 @@ export class Popup extends React.Component<{container: Container}, {}> {
     }
 
     render() {
-        return <div >
-            <label >IN PUT YOUR PASSWORD</label>
-            <input type="password" />
-            <input type="submit" value='OK' onClick={(e) => this.handleDivClick(e)}/>
-        </div>;
+        return (
+            <div style={{width:"100%", textAlign:"center"}}>
+                <div>
+                    <label >IN PUT YOUR PASSWORD</label>
+                </div>
+                <div>
+                    <input type="password" />
+                </div>
+                <div>
+                    <input type="submit" value='OK' onClick={(e) => this.handleDivClick(e)}/>
+                </div>
+            </div>
+        ) ;
     }
 }
