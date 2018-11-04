@@ -24,7 +24,7 @@ class ImgDetail {
     }
 }
 
-export class Content extends React.Component<{index:string}, {sectionDetail:SectionDetail}> {
+export class Content extends React.Component<{index:string, password:string}, {sectionDetail:SectionDetail}> {
 
     heightStep: Array<number> = [];
 
@@ -33,7 +33,7 @@ export class Content extends React.Component<{index:string}, {sectionDetail:Sect
 
     divRefs:React.RefObject<HTMLDivElement>;
 
-    constructor(props:{index: string}) {
+    constructor(props:{index: string, password:string}) {
         super(props);
         this.state = {sectionDetail: new SectionDetail()};
         this.divRefs = React.createRef();
@@ -110,7 +110,7 @@ export class Content extends React.Component<{index:string}, {sectionDetail:Sect
                 const src = index >= this.currentTopPicIndex - 1 && index <= this.currentButtonPicIndex + 1? 
                     `/static/encrypted/${this.state.sectionDetail.dirName}/${pic.name}.bin` :
                     null;
-                return <ImgComponent width={pic.width} height={pic.height} key={index} src={src} />
+                return <ImgComponent width={pic.width} height={pic.height} key={index} src={src} password={this.props.password} />
             })}
         </div>
     }

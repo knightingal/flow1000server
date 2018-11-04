@@ -1,12 +1,12 @@
 var CryptoJS = require("crypto-js");
 
-function decryptArray(fileContent) {
+function decryptArray(fileContent, password) {
 
     var words = CryptoJS.lib.WordArray;
     words.init(fileContent);
 
 
-    var key = CryptoJS.enc.Utf8.parse(""); //16位
+    var key = CryptoJS.enc.Utf8.parse(password); //16位
     const iv = CryptoJS.enc.Utf8.parse("2017041621251234");
     var decrypted = CryptoJS.AES.decrypt(CryptoJS.enc.Base64.stringify(words), key, {
         iv: iv,

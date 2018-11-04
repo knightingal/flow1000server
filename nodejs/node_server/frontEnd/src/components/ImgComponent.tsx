@@ -2,8 +2,8 @@ import * as React from 'react';
 import {decryptArray} from '../lib/decryptoArray';
 
 
-export class ImgComponent extends React.Component<{src: string, height: number, width: number}, {url: string}> {
-    constructor(props:{src: string, height: number, width: number}) {
+export class ImgComponent extends React.Component<{src: string, height: number, width: number, password: string}, {url: string}> {
+    constructor(props:{src: string, height: number, width: number, password: string}) {
         super(props);
         this.state = {
             url:null
@@ -14,7 +14,7 @@ export class ImgComponent extends React.Component<{src: string, height: number, 
         fetch(url).then(response => {
             return response.arrayBuffer();
         }).then(arrayBuffer => {
-            const decrypted = decryptArray(arrayBuffer);
+            const decrypted = decryptArray(arrayBuffer, this.props.password);
             const objectURL = URL.createObjectURL(new Blob([decrypted]));
             this.setState({
                 url: objectURL,
