@@ -21,7 +21,7 @@ export class Popup extends React.Component<{container: Container}, {}> {
 
     render() {
         return (
-            <div style={{width:"100%", textAlign:"center"}}>
+            <div style={{position: 'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)', textAlign: 'center', width: '300px'}}>
                 <div>
                     <label >IN PUT YOUR PASSWORD</label>
                 </div>
