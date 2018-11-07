@@ -21,12 +21,12 @@ export class Popup extends React.Component<{container: Container}, {}> {
 
     render() {
         return (
-            <div style={{position: 'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)', textAlign: 'center'}}>
+            <div style={{position: 'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)', textAlign: 'center', paddingRight:'4px', backgroundColor:'lightblue'}}>
                 <div>
                     <label >IN PUT YOUR PASSWORD</label>
                 </div>
-                <div style={{border:"2px", borderStyle:"solid", borderColor:"darkgray"}}>
-                    <input type="password" style={{width:"100%", border:"0"}} onChange={(e) => this.handleChange(e)}/>
+                <div style={{}}>
+                    <input type="password" style={{width:"100%", outline:"none", padding:"1px", border:"1px", borderStyle:"solid", borderColor:"darkgray"}} onChange={(e) => this.handleChange(e)}/>
                 </div>
                 <div>
                     <input type="submit" value='OK' onClick={(e) => this.handleDivClick(e)}/>
