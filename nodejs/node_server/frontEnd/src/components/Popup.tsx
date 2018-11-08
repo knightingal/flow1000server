@@ -27,7 +27,9 @@ export class Popup extends React.Component<{container: Container}, {}> {
                 left:'50%', 
                 transform: 'translate(-50%, -50%)', 
                 textAlign: 'center', 
-                paddingRight:'4px', 
+                padding:'16px',
+                paddingRight:'20px', 
+                boxShadow: '10px 10px 5px #888888',
                 backgroundColor:'lightblue'
             }}>
                 <div>

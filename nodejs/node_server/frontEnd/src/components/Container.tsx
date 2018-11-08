@@ -28,8 +28,6 @@ export class Container extends React.Component<{}, {popup: boolean ,index: strin
         this.password = password;
     }
 
-    
-
     render() {
         if (this.state.popup == true) {
             return <Popup container={this}/>
