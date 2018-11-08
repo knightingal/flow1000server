@@ -32,25 +32,48 @@ export class Popup extends React.Component<{container: Container}, {}> {
                 boxShadow: '10px 10px 5px #888888',
                 backgroundColor:'lightblue'
             }}>
-                <div>
-                    <label >IN PUT YOUR PASSWORD</label>
+                <div 
+                    style={{
+                        width:'230px',
+                    }}
+                >
+                    <label 
+                        style={{
+                            height:'19px',
+                            display:'block'
+                        }}
+                    >IN PUT YOUR PASSWORD</label>
                 </div>
                 <div>
                     <input 
                         type="password" 
                         style={{
                             width:"100%", 
+                            height:'19px',
                             outline:"none", 
                             padding:"1px", 
                             border:"1px", 
                             borderStyle:"solid", 
-                            borderColor:"darkgray"
+                            borderColor:"darkgray",
+                            marginTop: '8px',
+                            marginBottom: '8px'
                         }} 
                         onChange={(e) => this.handleChange(e)}
                     />
                 </div>
                 <div>
-                    <input type="submit" value='OK' onClick={(e) => this.handleDivClick(e)}/>
+                    <input 
+                        type="submit" 
+                        value='OK' 
+                        onClick={(e) => this.handleDivClick(e)} 
+                        style={{
+                            height:'19px',
+                            border: '1px',
+                            background: 'center',
+                            borderStyle: 'solid',
+                            borderColor: 'darkgray'
+                        }}
+                    />
                 </div>
             </div>
         ) ;
