@@ -1,13 +1,16 @@
 import * as React from 'react';
 import {Container} from './Container';
 
-export class Popup extends React.Component<{container: Container}, {}> {
+export class Popup extends React.Component<{container: Container}, {transform:string}> {
 
     password:string;
 
     constructor(props: {container: Container}) {
         super(props);
         this.password = "";
+        this.state = {
+            transform: 'translate(-50%, -50%) scale(0.5)',
+        }
     }
 
     handleDivClick(e: React.MouseEvent) {
@@ -19,27 +22,45 @@ export class Popup extends React.Component<{container: Container}, {}> {
         this.password = e.target.value;
     }
 
+    componentDidMount() {
+        setInterval(
+            () => this.popup(),
+            1
+        );
+
+    }
+
+    popup() {
+        this.setState({
+            transform:'translate(-50%, -50%)'
+        });
+    }
+
     render() {
         return (
             <div style={{
                 position: 'absolute', 
                 top:'50%', 
                 left:'50%', 
-                transform: 'translate(-50%, -50%)', 
+                transform: this.state.transform,
                 textAlign: 'center', 
                 padding:'16px',
                 paddingRight:'20px', 
                 boxShadow: '10px 10px 5px #888888',
-                backgroundColor:'lightblue'
+                width:'230px',
+                backgroundColor:'lightblue',
+                transition:'all 0.1s linear',
             }}>
+
                 <div 
                     style={{
-                        width:'230px',
                     }}
                 >
                     <label 
                         style={{
                             height:'19px',
+                            fontSize:'16px',
+                            fontFamily:'ubuntu',
                             display:'block'
                         }}
                     >IN PUT YOUR PASSWORD</label>
