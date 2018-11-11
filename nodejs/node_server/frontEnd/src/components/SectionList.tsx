@@ -6,11 +6,11 @@ class SectionBean {
     mtime:string;
 }
 
-export class SectionList extends React.Component<{container: Container}, {sectionList:Array<SectionBean>}> {
+export class SectionList extends React.Component<{container: Container}, {sectionList:Array<SectionBean>, selectedIndex: string}> {
     url:URL;
     constructor(props:{container: Container}) {
         super(props);
-        this.state = {sectionList:[]};
+        this.state = {sectionList:[], selectedIndex: null};
         this.url = new URL(document.URL);
     }
 
@@ -36,6 +36,9 @@ export class SectionList extends React.Component<{container: Container}, {sectio
 
     handleSectionClick(e: React.MouseEvent, index: string) {
         this.props.container.notifySectionClick(index);
+        this.setState({
+            selectedIndex: index
+        });
     }
 
     componentDidMount() {
@@ -45,7 +48,7 @@ export class SectionList extends React.Component<{container: Container}, {sectio
     render() {
         return <div className="SectionList">
             {this.state.sectionList.map((sectionBean: SectionBean, index: number) => {
-                return (<div key={index} onClick={(e) => this.handleSectionClick(e, sectionBean.index)}>
+                return (<div key={index} onClick={(e) => this.handleSectionClick(e, sectionBean.index)} style={{backgroundColor: (sectionBean.index === this.state.selectedIndex ? 'yellow' : 'white')}}>
                     <a className="SectionListItem">{sectionBean.name}</a>
                 </div>);
             })}
