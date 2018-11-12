@@ -3,9 +3,6 @@ const router = express.Router();
 const http = require('http');
 const mysql = require('mysql');
 const path = require('path');
-const fs = require('fs');
-const postMsg = require('./postMsg');
-const url = require('url');
 const images = require('images');
 
 const connection = mysql.createConnection({
@@ -166,8 +163,7 @@ Date.prototype.toStamp = function() {
         + (minute > 9 ? minute.toString(): this.numericArray[minute])
         + (second > 9 ? second.toString(): this.numericArray[second]);
 }
-var RootDirString = 'D:\\Games\\linux1000\\source\\';
-var enCryptedDirString = 'D:\\Games\\linux1000\\encrypted\\' 
+
 router.post('/allComplete/', (req, res) => {
     const bodyObj = req.body;
     res.send("");
