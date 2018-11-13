@@ -1,5 +1,6 @@
 var config = {
-    password:"******"
+    password:"******",
+    dbpassword:"******"
 };
 
 module.exports = config;

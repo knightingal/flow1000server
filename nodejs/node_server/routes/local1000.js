@@ -4,11 +4,12 @@ const http = require('http');
 const mysql = require('mysql');
 const path = require('path');
 const images = require('images');
+const config = require('../config')
 
 const connection = mysql.createConnection({
     host:'127.0.0.1',
     user:'knightingal',
-    password:'******',
+    password:config.dbpassword,
     database:'flow1000db'
 });
 connection.connect();
