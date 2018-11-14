@@ -23,11 +23,7 @@ export class Popup extends React.Component<{container: Container}, {transform:st
     }
 
     componentDidMount() {
-        setInterval(
-            () => this.popup(),
-            1
-        );
-
+        setInterval(() => this.popup(), 1);
     }
 
     popup() {
@@ -51,7 +47,6 @@ export class Popup extends React.Component<{container: Container}, {transform:st
                 backgroundColor:'lightblue',
                 transition:'all 0.1s linear',
             }}>
-
                 <div 
                     style={{
                     }}
