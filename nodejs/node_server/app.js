@@ -14,6 +14,9 @@ var local1000 = require('./routes/local1000');
 var navy = require('./routes/navy');
 picDirs.dirStat = [];
 var app = express();
+var expressWs = require('express-ws')(app);
+
+
 var fs = require('fs');
 if (os.platform() === "win32") {
     var RootDirString = 'D:\\Games\\linux1000\\';
@@ -97,6 +100,13 @@ app.use('/startDownload', postMsg);
 app.use('/local1000', local1000)
 app.use('/navy', navy);
 app.use('/picDirs', picDirs);
+
+app.ws('/echo', function(ws, req) {
+    ws.on('message', function(msg) {
+        console.log('ws echo ' + msg);
+        ws.send(msg);
+    });
+});
 
 app.post('/testExist', function(req, res){
     console.log(req.body);
