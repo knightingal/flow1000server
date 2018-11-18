@@ -106,6 +106,8 @@ app.ws('/echo', function(ws, req) {
         console.log('ws echo ' + msg);
         ws.send(msg);
     });
+
+    local1000.echoWs = ws;
 });
 
 app.post('/testExist', function(req, res){

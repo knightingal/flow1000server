@@ -127,6 +127,9 @@ router.get('/picDetailAjax', function(req, res) {
     })(reperId).then(reper=> {
         res.send(JSON.stringify(reper));
     });
+    if (router.echoWs !== undefined) {
+        router.echoWs.send("picDetailAjax");
+    }
 });
 
 router.get('/picContentAjax', function(req, res) {
@@ -297,6 +300,9 @@ router.get('/picIndexAjax', function(req, res) {
     })(time_stamp, album).then(repertorys => {
         res.send(JSON.stringify(repertorys));
     });
+    if (router.echoWs !== undefined) {
+        router.echoWs.send("picIndexAjax");
+    }
 });
 router.get('/tarsylia', function(req, res) {
     
