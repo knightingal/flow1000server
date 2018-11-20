@@ -186,8 +186,20 @@ router.post('/allComplete/', (req, res) => {
     })
     .then((retValues) => {
         connection.commit();
-    })
+    });
 
+    if (router.updateListenerWs !== undefined) {
+        (async (reperId) => {
+            let repers = await queryRepertorysById(reperId);
+            return {
+                index: repers[0].id,
+                name: repers[0].dir_name,
+                mtime: repers[0].create_time
+            };
+        })(bodyObj.sectionId).then(reper => {
+            router.updateListenerWs.send(JSON.stringify(reper));
+        });
+    }
 });
 
 router.post('/urls1000/', function(req, res) {

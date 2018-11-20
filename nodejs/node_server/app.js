@@ -101,13 +101,20 @@ app.use('/local1000', local1000)
 app.use('/navy', navy);
 app.use('/picDirs', picDirs);
 
-app.ws('/echo', function(ws, req) {
+app.ws('/updateListenerWs', function(ws, req) {
+    console.log("websocket connected");
+
     ws.on('message', function(msg) {
         console.log('ws echo ' + msg);
         ws.send(msg);
     });
 
-    local1000.echoWs = ws;
+    ws.on('close', () => {
+        console.log('ws closed');
+        local1000.updateListenerWs = undefined;
+    });
+
+    local1000.updateListenerWs = ws;
 });
 
 app.post('/testExist', function(req, res){

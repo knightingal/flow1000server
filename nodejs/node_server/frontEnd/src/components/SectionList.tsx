@@ -43,6 +43,15 @@ export class SectionList extends React.Component<{container: Container}, {sectio
 
     componentDidMount() {
         this.fecthSectionList();        
+        const ws = new WebSocket("ws://127.0.0.1:8000/updateListenerWs");
+
+        ws.onmessage = (event: MessageEvent) => {
+            const data = event.data;
+            const section: SectionBean = JSON.parse(data);
+            this.setState({
+                sectionList: this.state.sectionList.concat(section)
+            });
+        }
     }
 
     render() {
