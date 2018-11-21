@@ -116,7 +116,7 @@ export class Content extends React.Component<{index:string, password:string}, {s
                         src={`/static/encrypted/${this.state.sectionDetail.dirName}/${pic.name}.bin`} 
                         password={this.props.password} 
                     /> :
-                    <div style={{width:`${pic.width}px`, height:`${pic.height}px`}} />
+                    <div key={index} style={{width:`${pic.width}px`, height:`${pic.height}px`}} />
             })}
         </div>
     }
