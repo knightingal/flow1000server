@@ -107,10 +107,16 @@ export class Content extends React.Component<{index:string, password:string}, {s
     render() {
         return <div className="Content" onScroll={(e) => this.scrollHandler(e)}  ref={this.divRefs}>
             {this.state.sectionDetail.pics.map((pic: ImgDetail, index: number) => {
-                const src = index >= this.currentTopPicIndex - 1 && index <= this.currentButtonPicIndex + 1? 
-                    `/static/encrypted/${this.state.sectionDetail.dirName}/${pic.name}.bin` :
-                    null;
-                return <ImgComponent width={pic.width} height={pic.height} key={index} src={src} password={this.props.password} />
+                const displayImg = index >= this.currentTopPicIndex - 1 && index <= this.currentButtonPicIndex + 1; 
+                return displayImg ? 
+                    <ImgComponent 
+                        width={pic.width} 
+                        height={pic.height} 
+                        key={index} 
+                        src={`/static/encrypted/${this.state.sectionDetail.dirName}/${pic.name}.bin`} 
+                        password={this.props.password} 
+                    /> :
+                    <div style={{width:`${pic.width}px`, height:`${pic.height}px`}} />
             })}
         </div>
     }
