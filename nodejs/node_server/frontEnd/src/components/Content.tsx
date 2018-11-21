@@ -93,8 +93,8 @@ export class Content extends React.Component<{index:string, password:string}, {s
             console.log(`change top to pic index: ${this.currentTopPicIndex}`);
             update = true;
         }
-        if (this.checkPostionInPic(scrollTop+clientHeight) !== this.currentButtonPicIndex) {
-            this.currentButtonPicIndex = this.checkPostionInPic(scrollTop+clientHeight);
+        if (this.checkPostionInPic(scrollTop + clientHeight) !== this.currentButtonPicIndex) {
+            this.currentButtonPicIndex = this.checkPostionInPic(scrollTop + clientHeight);
             console.log(`change button to pic index: ${this.currentButtonPicIndex}`);
             update = true;
         }
