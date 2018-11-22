@@ -86,20 +86,24 @@ export class Content extends React.Component<{index:string, password:string}, {s
         const scrollTop: number = (e.target as HTMLDivElement).scrollTop;
         const clientHeight: number = (e.target as HTMLDivElement).clientHeight;
         let update = false;
-        if (this.checkPostionInPic(scrollTop) !== this.currentTopPicIndex) {
-            this.currentTopPicIndex = this.checkPostionInPic(scrollTop);
+        // calculate the index of top picture after scroll
+        const refreshTopPicIndex = this.checkPostionInPic(scrollTop);
+        if (refreshTopPicIndex !== this.currentTopPicIndex) {
+            this.currentTopPicIndex = refreshTopPicIndex;
             console.log(`change top to pic index: ${this.currentTopPicIndex}`);
             update = true;
         }
-        if (this.checkPostionInPic(scrollTop + clientHeight) !== this.currentButtonPicIndex) {
-            this.currentButtonPicIndex = this.checkPostionInPic(scrollTop + clientHeight);
+        // calculate the index of button picture after scroll
+        const refreshButtonPicIndex = this.checkPostionInPic(scrollTop + clientHeight);
+        if (refreshButtonPicIndex !== this.currentButtonPicIndex) {
+            this.currentButtonPicIndex = refreshButtonPicIndex;
             console.log(`change button to pic index: ${this.currentButtonPicIndex}`);
             update = true;
         }
+        // if any index of picture changed, re-render the page
         if (update) {
             this.setState(this.state);
         }
-
     }
 
     render() {
