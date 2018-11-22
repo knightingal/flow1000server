@@ -84,9 +84,7 @@ export class Content extends React.Component<{index:string, password:string}, {s
 
     scrollHandler(e : React.UIEvent) {
         const scrollTop: number = (e.target as HTMLDivElement).scrollTop;
-        const scrollHeight: number = (e.target as HTMLDivElement).scrollHeight;
         const clientHeight: number = (e.target as HTMLDivElement).clientHeight;
-        // console.log(`${scrollTop} / ${scrollHeight}: ${clientHeight}: ${scrollTop * 100 / (scrollHeight - clientHeight)}%`);
         let update = false;
         if (this.checkPostionInPic(scrollTop) !== this.currentTopPicIndex) {
             this.currentTopPicIndex = this.checkPostionInPic(scrollTop);
