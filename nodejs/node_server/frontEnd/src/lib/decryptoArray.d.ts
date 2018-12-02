@@ -1,1 +1,0 @@
-export function decryptArray(fileContent: any, password: string) : any;
