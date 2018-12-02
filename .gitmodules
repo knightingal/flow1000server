@@ -1,0 +1,3 @@
+[submodule "nodejs/node_server/frontEnd"]
+	path = nodejs/node_server/frontEnd
+	url = git@github.com:knightingal/flow1000FrontEnd.git
