@@ -43,7 +43,7 @@ app.use("/static", express.static(RootDirString));
 app.use("/tarsyliaImg", express.static(TarsyliaPath));
 app.use("/lib", express.static(path.join(__dirname, 'node_modules')));
 app.use("/frontEnd", express.static(path.join(__dirname, 'frontEnd')));
-app.use("/dist", express.static(path.join(__dirname, 'dist')));
+app.use("/dist", express.static(path.join(__dirname, 'frontEnd/dist')));
 
 
 
