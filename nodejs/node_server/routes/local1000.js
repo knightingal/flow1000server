@@ -290,7 +290,10 @@ router.get('/repertory', function(req, res) {
     });
 });
 
-router.get('/picIndexAjax', function(req, res) {
+router.get('/picIndexAjax', (req, res) => {
+    res.set({
+        "Content-Type":"application/json;charset=UTF-8"
+    });
     var time_stamp = req.query.time_stamp;
     if (time_stamp == null || time_stamp == "") {
         time_stamp = "19700101000000";
