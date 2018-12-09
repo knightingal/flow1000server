@@ -95,19 +95,19 @@ function queryPicsByReperId(reperId) {
     });
 }
 
-router.get("/", function (req, res) {
+router.get("/", (req, res) => {
     queryRepertorys("19701010000000").then(pic_repertorys => {
         res.render('local1000index', {pic_repertorys: pic_repertorys});
     })
 })
 
-router.get("/winjs1000index", function (req, res) {
+router.get("/winjs1000index", (req, res) => {
     queryRepertorys("19701010000000").then(pic_repertorys => {
         res.render('winjs1000index', {pic_repertorys: pic_repertorys});
     })
 })
 
-router.get('/picDetailAjax', function(req, res) {
+router.get('/picDetailAjax', (req, res) => {
     var reperId = req.query.id;
     (async (reperId) => {
         let repers = await queryRepertorysById(reperId);
@@ -132,7 +132,7 @@ router.get('/picDetailAjax', function(req, res) {
     }
 });
 
-router.get('/picContentAjax', function(req, res) {
+router.get('/picContentAjax', (req, res) => {
     var reperId = req.query.id;
     (async (reperId) => {
         let repers = await queryRepertorysById(reperId);
@@ -202,7 +202,7 @@ router.post('/allComplete/', (req, res) => {
     }
 });
 
-router.post('/urls1000/', function(req, res) {
+router.post('/urls1000/', (req, res) => {
     // let body = '{"title":"title1","imgSrcArray":[
     //    {"src":"http://127.0.0.1/1.jpg","ref":"http://127.0.0.1/16.html"},
     //    {"src":"http://127.0.0.1/2.jpg","ref":"http://127.0.0.1/16.html"}
@@ -270,7 +270,7 @@ router.post('/urls1000/', function(req, res) {
     // var fileName = path.basename(imgSrc);
 });
 
-router.get('/repertory', function(req, res) {
+router.get('/repertory', (req, res) => {
     var reperId = req.query.id;
     (async (reperId) => {
         let repers = await queryRepertorysById(reperId);
@@ -319,7 +319,7 @@ router.get('/picIndexAjax', (req, res) => {
         router.echoWs.send("picIndexAjax");
     }
 });
-router.get('/tarsylia', function(req, res) {
+router.get('/tarsylia', (req, res) => {
     
     (async () => {
         books = await queryTarsyliaBook();
@@ -337,7 +337,7 @@ router.get('/tarsylia', function(req, res) {
     });
 });
 
-router.get('/picIndex', function(req, res) {
+router.get('/picIndex', (req, res) => {
     var time_stamp = req.query.time_stamp;
     if (time_stamp == null || time_stamp == "") {
         time_stamp = "19700101000000";
