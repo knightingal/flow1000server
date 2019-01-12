@@ -1,6 +1,7 @@
 .Container {
     display: flex;
-    height: 100%;
+    height: calc(100% - 60px);
+    flex: 1 1 auto;
 }
 
 .Content {
@@ -17,4 +18,21 @@
 }
 .SectionListItem {
     cursor: pointer;
+}
+
+.Right {
+    height: 100%;
+    flex: 0 0 100px;
+    background-color: gray;
+}
+
+.RContainer {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.Header, .Footer {
+    flex: 0 0 30px;
+    background-color: darkgray;
 }
